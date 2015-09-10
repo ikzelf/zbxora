@@ -36,7 +36,7 @@ site checks files - examples:
 
 example config file: zbxora.fsdb02.cfg
 --------------------------------------
-`
+```
 [zbxora]
 db_url: //localhost:15214/fsdb02
 username: cistats
@@ -51,7 +51,7 @@ to_zabbix_method: NOzabbix_sender
 # if to_zabbix_method is zabbix_sender, every cycle a sender process is started
 to_zabbix_args: zabbix_sender -z 127.0.0.1 -T -i 
 # the output filename is added to to_zabbix_args
-`
+```
 --------------------------------------
 end of config file example
 
