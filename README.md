@@ -97,7 +97,9 @@ For pluggable database, just connect to a global account to monitor all plugins
 zbxora_starter:
 this is an aide to [re]start zbxora in an orderly way. Put it in the crontab, every minute.
 It will check the etc directory (note the lack of a leading '/') and start the configuration
-files named zbxora.{you_config}.cfg, each given their own logfile.
+files named zbxora.{you_config}.cfg, each given their own logfile. Notice the sleep in the start
+sequence. This is done to make sure not all concurrently running zbxora sessions awake at
+the same moment. Now their awakenings is separated by a second.
 
 zbxora_sender:
 This convenient when monitoring lot's of databases from one client. In that case it is more
@@ -114,13 +116,17 @@ least required privileges, both on OS as on database leven.
 Don't use a dba type account for this.
 
 database user creation:
+'''
 create user cistats identified by knowoneknows;
 grant create session, select any dictionary, oem_monitor to cistats;
+'''
 
 In Oracle 12 - when using pluggable database:
+'''
 create user c##cistats identified by knowoneknows;
 alter user c##cistats set container_data all = container = current;
 grant create session, select any dictionary, oem_monitor, dv_monitor to c##cistats;
+'''
 
 extra warning:
 I have written this in python but not in a pythonic style.
