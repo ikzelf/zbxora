@@ -13,29 +13,30 @@ usage zbxora.py -c configfile
 resulting in log to stdout and datafile in specified out_dir/{configfile}.zbx
 
 sample config:
--rwxr-xr-x  1 ronr  staff  19733 Sep 10 07:33 bin/zbxora.py
--rwxr-xr-x  1 ronr  staff    439 Sep 10 13:28 bin/zbxora_sender
--rwxr-xr-x  1 ronr  staff    463 Sep  8 09:57 bin/zbxora_starter
+- -rwxr-xr-x  1 ronr  staff  19733 Sep 10 07:33 bin/zbxora.py
+- -rwxr-xr-x  1 ronr  staff    439 Sep 10 13:28 bin/zbxora_sender
+- -rwxr-xr-x  1 ronr  staff    463 Sep  8 09:57 bin/zbxora_starter
 
 database config files:
--rw-r--r--  1 ronr  staff    301 Jul 10 14:01 etc/zbxora.fsdb02.cfg
+- -rw-r--r--  1 ronr  staff    301 Jul 10 14:01 etc/zbxora.fsdb02.cfg
 
 template for database config file: (copy to zbxora.{configname}.cfg)
--rw-r--r--  1 ronr  staff    754 Sep  9 14:18 etc/zbxora_config_template.cfg
+- -rw-r--r--  1 ronr  staff    754 Sep  9 14:18 etc/zbxora_config_template.cfg
 
 default checks files:
--rw-r--r--  1 ronr  staff   1618 Sep  7 11:30 etc/zbxora_checks.asm.11.cfg
--rw-r--r--  1 ronr  staff   8580 Sep  8 12:56 etc/zbxora_checks.primary.11.cfg
--rw-r--r--  1 ronr  staff  11999 Sep  8 12:54 etc/zbxora_checks.primary.12.cfg
--rw-r--r--  1 ronr  staff   1233 Sep  8 17:21 etc/zbxora_checks.standby.11.cfg
+- -rw-r--r--  1 ronr  staff   1618 Sep  7 11:30 etc/zbxora_checks.asm.11.cfg
+- -rw-r--r--  1 ronr  staff   8580 Sep  8 12:56 etc/zbxora_checks.primary.11.cfg
+- -rw-r--r--  1 ronr  staff  11999 Sep  8 12:54 etc/zbxora_checks.primary.12.cfg
+- -rw-r--r--  1 ronr  staff   1233 Sep  8 17:21 etc/zbxora_checks.standby.11.cfg
 
 site checks files - examples:
--rw-r--r--  1 ronr  staff     67 Sep  9 16:07 etc/zbxora_checks.ebs.cfg
--rw-r--r--  1 ronr  staff      0 Sep  9 15:29 etc/zbxora_checks.sap.cfg
+- -rw-r--r--  1 ronr  staff     67 Sep  9 16:07 etc/zbxora_checks.ebs.cfg
+- -rw-r--r--  1 ronr  staff      0 Sep  9 15:29 etc/zbxora_checks.sap.cfg
 
 
 example config file: zbxora.fsdb02.cfg
 --------------------------------------
+`
 [zbxora]
 db_url: //localhost:15214/fsdb02
 username: cistats
@@ -50,6 +51,7 @@ to_zabbix_method: NOzabbix_sender
 # if to_zabbix_method is zabbix_sender, every cycle a sender process is started
 to_zabbix_args: zabbix_sender -z 127.0.0.1 -T -i 
 # the output filename is added to to_zabbix_args
+`
 --------------------------------------
 end of config file example
 
