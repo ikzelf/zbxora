@@ -110,24 +110,24 @@ efficient way.
 TODO: make zbxora.py open a pipe to zabbix_sender and use that all the time instead of opening
 a new session every minute.
 
-Warning:
+# Warning:
 Use the code at your own risk. It is tested and seems to be functional. Use an account with the
 least required privileges, both on OS as on database leven.
 Don't use a dba type account for this.
 
 database user creation:
-'''
+```
 create user cistats identified by knowoneknows;
 grant create session, select any dictionary, oem_monitor to cistats;
-'''
+```
 
 In Oracle 12 - when using pluggable database:
-'''
+```
 create user c##cistats identified by knowoneknows;
 alter user c##cistats set container_data all = container = current;
 grant create session, select any dictionary, oem_monitor, dv_monitor to c##cistats;
-'''
+```
 
-extra warning:
+# extra warning:
 I have written this in python but not in a pythonic style.
 A little cleanup to convert this to clean python code - and preserving efficiency - is welcome.
