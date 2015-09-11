@@ -52,8 +52,6 @@ to_zabbix_method: NOzabbix_sender
 to_zabbix_args: zabbix_sender -z 127.0.0.1 -T -i 
 # the output filename is added to to_zabbix_args
 ```
---------------------------------------
-end of config file example
 
 When using this configfile ( zbxoa.py -c etc/zbxora.fsdb02.cfg )
 zbxora.py will read the configfile
