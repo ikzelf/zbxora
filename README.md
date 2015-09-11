@@ -31,7 +31,7 @@ default checks files:
 
 site checks files - examples:
 - `etc/zbxora_checks.ebs.cfg`
-- etc/zbxora_checks.sap.cfg`
+- `etc/zbxora_checks.sap.cfg`
 
 
 example config file: zbxora.fsdb02.cfg
