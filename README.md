@@ -53,7 +53,8 @@ to_zabbix_args: zabbix_sender -z 127.0.0.1 -T -i
 # the output filename is added to to_zabbix_args
 ```
 
-When using this configfile ( zbxoa.py -c etc/zbxora.fsdb02.cfg )
+Assuming bin/ is in PATH:
+When using this configfile ( zbxora.py -c etc/zbxora.fsdb02.cfg )
 zbxora.py will read the configfile
 and try to connect to the database using db_url
 If all parameters are correct zbxora will keep looping forever.
