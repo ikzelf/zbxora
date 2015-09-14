@@ -21,8 +21,9 @@
 #          rrood 0.36 20150908 added database_role ('p'rimary,'ls'ogial/'ps'hysical standby)
 #          rrood 0.37 20150909 removed output filenames, fallback to configfile name
 #          rrood 0.38 20150909 added site addition option in config
-#          rrood 0.39 20150909 ora-03114 is also fatal for connection
-VERSION = "0.39"
+#          rrood 0.39 20150909 ora-3114 is also fatal for connection
+#          rrood 0.40 20150914 ora-3135 is also fatal for connection
+VERSION = "0.40"
 import cx_Oracle as db
 import json
 import collections
@@ -298,7 +299,7 @@ while True:
                                     printf('%s key=%s.%s ORA-%d: Database execution error: %s\n', \
                                         datetime.datetime.fromtimestamp(time.time()), \
                                         section, key, ERROR.code, ERROR.message.strip())
-                                    if ERROR.code in(28, 1012, 3113, 3114):
+                                    if ERROR.code in(28, 1012, 3113, 3114, 3135):
                                         raise
                         # end of a section
                         output(HOSTNAME, ME[0] + "[query," + section + ",,ela]", \
