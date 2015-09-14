@@ -23,7 +23,8 @@
 #          rrood 0.38 20150909 added site addition option in config
 #          rrood 0.39 20150909 ora-3114 is also fatal for connection
 #          rrood 0.40 20150914 ora-3135 is also fatal for connection
-VERSION = "0.40"
+#          rrood 0.41 20150914 also report connected instance_name in logging
+VERSION = "0.41"
 import cx_Oracle as db
 import json
 import collections
@@ -129,7 +130,7 @@ while True:
             CURS = conn.cursor()
             try:
                 CURS.execute("""select substr(i.version,0,instr(i.version,'.')-1),
-                    s.sid, s.serial#, p.value instance_type 
+                    s.sid, s.serial#, p.value instance_type, i.instance_name
                     from v$instance i, v$session s, v$parameter p 
                     where s.sid = (select sid from v$mystat where rownum = 1)
                     and p.name = 'instance_type'""" )
@@ -138,6 +139,7 @@ while True:
                 MYSID = DATA[1]
                 MYSERIAL = DATA[2]
                 ITYPE = DATA[3]
+                INAME = DATA[4]
             except db.DatabaseError as oerr:
                 ERROR, = oerr.args
                 if ERROR.code == 904:
@@ -152,10 +154,11 @@ while True:
                 DBROL = "asm"
             CURS.close()
 
-            printf('%s Database (%s) connected %s@%s as %s version=%s session=%d,%d\n%s db role:%s\n', \
+            printf('%s Database (%s) connected %s@%s as %s version=%s session=%d,%d using instance %s\n%s db role:%s\n', \
                     datetime.datetime.fromtimestamp(time.time()), \
                     ITYPE,\
                     USERNAME, DB_URL, ROLE, DBVERSION, MYSID, MYSERIAL, \
+                    INAME, \
                     datetime.datetime.fromtimestamp(time.time()), \
                     DBROL)
             if ITYPE == "asm":
