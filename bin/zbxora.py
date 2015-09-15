@@ -25,7 +25,8 @@
 #          rrood 0.40 20150914 ora-3135 is also fatal for connection
 #          rrood 0.41 20150914 also report connected instance_name in logging
 #          rrood 0.42 20150914 show connected user; helps debugging wallets
-VERSION = "0.42"
+#          rrood 0.43 20150915 check # columns returned for metrics; should be 2 causes zbxORA-2
+VERSION = "0.43"
 import cx_Oracle as db
 import json
 import collections
@@ -285,18 +286,25 @@ while True:
                                         # printf ("DEBUG lld key: %s json: %s\n", key, ROWS_JSON)
                                         output(HOSTNAME, key, ROWS_JSON)
                                     else:
-                                        for row in rows:
-                                            # printf("DEBUG zabbix_host:%s zabbix_key:%s " + \
-                                                # "value:%s\n", HOSTNAME, row[0], row[1])
-                                            output(HOSTNAME, row[0], row[1])
+                                        if len(rows[0]) == 2:
+                                            for row in rows:
+                                                # printf("DEBUG zabbix_host:%s zabbix_key:%s " + \
+                                                    # "value:%s\n", HOSTNAME, row[0], row[1])
+                                                output(HOSTNAME, row[0], row[1])
+                                            output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                                key + ",status]", 0)
+                                        else:
+                                            printf('%s key=%s.%s zbxORA-%d: SQL format error: %s\n', \
+                                                datetime.datetime.fromtimestamp(time.time()), \
+                                                section, key, 2, "expect key,value pairs")
+                                            output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                               key + ",status]", 2)
                                     fetchela = timer() - startf
                                     ELAPSED = timer() - START
                                     output(HOSTNAME, ME[0] + "[query," + section + "," + \
                                         key + ",ela]", ELAPSED)
                                     output(HOSTNAME, ME[0] + "[query," + section + "," + \
                                         key + ",fetch]", fetchela)
-                                    output(HOSTNAME, ME[0] + "[query," + section + "," + \
-                                        key + ",status]", 0)
                                 except db.DatabaseError as oerr:
                                     ERROR, = oerr.args
                                     ELAPSED = timer() - START
