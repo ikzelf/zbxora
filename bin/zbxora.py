@@ -26,7 +26,8 @@
 #          rrood 0.41 20150914 also report connected instance_name in logging
 #          rrood 0.42 20150914 show connected user; helps debugging wallets
 #          rrood 0.43 20150915 check # columns returned for metrics; should be 2 causes zbxORA-2
-VERSION = "0.43"
+#          rrood 0.44 20150915 removed incorrect error msg
+VERSION = "0.44"
 import cx_Oracle as db
 import json
 import collections
@@ -296,9 +297,6 @@ while True:
                                             output(HOSTNAME, ME[0] + "[query," + section + "," + \
                                                 key + ",status]", 0)
                                       elif len(rows) == 0:
-                                            printf('%s key=%s.%s zbxORA-%d: SQL format error: %s\n', \
-                                                  datetime.datetime.fromtimestamp(time.time()), \
-                                                  section, key, 2, "expect key,value pairs")
                                             output(HOSTNAME, ME[0] + "[query," + section + "," + \
                                                  key + ",status]", 0)
                                       else:
