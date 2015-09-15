@@ -93,14 +93,14 @@ should be application independent and be generic for that type and version of da
 For RAC databases, just connect using 1 instance
 For pluggable database, just connect to a global account to monitor all plugins
 
-zbxora_starter:
+# zbxora_starter:
 this is an aide to [re]start zbxora in an orderly way. Put it in the crontab, every minute.
 It will check the etc directory (note the lack of a leading '/') and start the configuration
 files named zbxora.{you_config}.cfg, each given their own logfile. Notice the sleep in the start
 sequence. This is done to make sure not all concurrently running zbxora sessions awake at
 the same moment. Now their awakenings is separated by a second.
 
-zbxora_sender:
+# zbxora_sender:
 This convenient when monitoring lot's of databases from one client. In that case it is more
 efficient to collect all output files in zbxora_out/ and upload them in one session to zabbix.
 It is possible to have zbxora call zabbix_sender but this is not implemented in the most
