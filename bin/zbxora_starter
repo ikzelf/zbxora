@@ -13,14 +13,17 @@ cd $MON_HOME
 monitors=`ls etc/zbxora.*.cfg`
 for mon in $monitors
 do
-  ps -fu$UID|grep -v grep|grep $mon >/dev/null 2>&1
-  procs=$?
-  echo mon $mon `ps -fu$UID|grep -v grep|grep $mon` $procs
-  if [ $procs -ne 0 ]
+  if [ -w $mon ]
   then
-    id=$(basename $mon)
-    echo "`date ` Starting $mon" >>log/$ME.log
-    nohup zbxora.py -c $mon >log/$id.log 2>&1 &
+    ps -fu$UID|grep -v grep|grep $mon >/dev/null 2>&1
+    procs=$?
+    echo mon $mon `ps -fu$UID|grep -v grep|grep $mon` $procs
+    if [ $procs -ne 0 ]
+    then
+      id=$(basename $mon)
+      echo "`date ` Starting $mon" >>log/$ME.log
+      nohup zbxora.py -c $mon >log/$id.log 2>&1 &
+    fi
+    sleep 1
   fi
-  sleep 1
 done

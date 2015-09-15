@@ -285,20 +285,28 @@ while True:
                                         ROWS_JSON = '{\"data\":'+json.dumps(OBJECTS_LIST)+'}'
                                         # printf ("DEBUG lld key: %s json: %s\n", key, ROWS_JSON)
                                         output(HOSTNAME, key, ROWS_JSON)
+                                        output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                            key + ",status]", 0)
                                     else:
-                                        if len(rows[0]) == 2:
+                                      if  len(rows) > 0 and len(rows[0]) == 2:
                                             for row in rows:
                                                 # printf("DEBUG zabbix_host:%s zabbix_key:%s " + \
                                                     # "value:%s\n", HOSTNAME, row[0], row[1])
                                                 output(HOSTNAME, row[0], row[1])
                                             output(HOSTNAME, ME[0] + "[query," + section + "," + \
                                                 key + ",status]", 0)
-                                        else:
+                                      elif len(rows) == 0:
                                             printf('%s key=%s.%s zbxORA-%d: SQL format error: %s\n', \
-                                                datetime.datetime.fromtimestamp(time.time()), \
-                                                section, key, 2, "expect key,value pairs")
+                                                  datetime.datetime.fromtimestamp(time.time()), \
+                                                  section, key, 2, "expect key,value pairs")
                                             output(HOSTNAME, ME[0] + "[query," + section + "," + \
-                                               key + ",status]", 2)
+                                                 key + ",status]", 0)
+                                      else:
+                                            printf('%s key=%s.%s zbxORA-%d: SQL format error: %s\n', \
+                                                  datetime.datetime.fromtimestamp(time.time()), \
+                                                  section, key, 2, "expect key,value pairs")
+                                            output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                                 key + ",status]", 2)
                                     fetchela = timer() - startf
                                     ELAPSED = timer() - START
                                     output(HOSTNAME, ME[0] + "[query," + section + "," + \
