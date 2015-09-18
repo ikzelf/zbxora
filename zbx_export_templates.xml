@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>2.0</version>
-    <date>2015-09-10T13:02:37Z</date>
+    <date>2015-09-18T11:34:58Z</date>
     <groups>
         <group>
             <name>TEMPLATES</name>
@@ -485,8 +485,81 @@
                             <logtimefmt/>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes/>
-                    <graph_prototypes/>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{template zbxORA:dgrp[{#DGRP},pctfree].last()}&lt;5</expression>
+                            <name>dg[{#DGRP},pctfree] &lt; $1</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbxORA:dgrp[{#DGRP},pctfree].last()}&lt;20</expression>
+                            <name>dg[{#DGRP},pctfree] &lt; $1</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>1</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbxORA:dgrp[{#DGRP},pctfree].last()}&lt;10</expression>
+                            <name>dg[{#DGRP},pctfree] &lt; $1</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>2</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>dgrp[{#DGRP},usage]</name>
+                            <width>900</width>
+                            <height>200</height>
+                            <yaxismin>0</yaxismin>
+                            <yaxismax>100</yaxismax>
+                            <show_work_period>1</show_work_period>
+                            <show_triggers>1</show_triggers>
+                            <type>0</type>
+                            <show_legend>1</show_legend>
+                            <show_3d>0</show_3d>
+                            <percent_left>0</percent_left>
+                            <percent_right>0</percent_right>
+                            <ymin_type_1>0</ymin_type_1>
+                            <ymax_type_1>0</ymax_type_1>
+                            <ymin_item_1>0</ymin_item_1>
+                            <ymax_item_1>0</ymax_item_1>
+                            <graph_items>
+                                <graph_item>
+                                    <sortorder>0</sortorder>
+                                    <drawtype>0</drawtype>
+                                    <color>C80000</color>
+                                    <yaxisside>0</yaxisside>
+                                    <calc_fnc>2</calc_fnc>
+                                    <type>0</type>
+                                    <item>
+                                        <host>template zbxORA</host>
+                                        <key>dgrp[{#DGRP},filesize]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <drawtype>0</drawtype>
+                                    <color>00C800</color>
+                                    <yaxisside>0</yaxisside>
+                                    <calc_fnc>2</calc_fnc>
+                                    <type>0</type>
+                                    <item>
+                                        <host>template zbxORA</host>
+                                        <key>dgrp[{#DGRP},usedbytes]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
                     <host_prototypes/>
                 </discovery_rule>
                 <discovery_rule>
@@ -713,7 +786,40 @@
                         </item_prototype>
                     </item_prototypes>
                     <trigger_prototypes/>
-                    <graph_prototypes/>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>inst[{#INST_NAME},uptime</name>
+                            <width>900</width>
+                            <height>200</height>
+                            <yaxismin>0</yaxismin>
+                            <yaxismax>100</yaxismax>
+                            <show_work_period>1</show_work_period>
+                            <show_triggers>1</show_triggers>
+                            <type>0</type>
+                            <show_legend>1</show_legend>
+                            <show_3d>0</show_3d>
+                            <percent_left>0</percent_left>
+                            <percent_right>0</percent_right>
+                            <ymin_type_1>0</ymin_type_1>
+                            <ymax_type_1>0</ymax_type_1>
+                            <ymin_item_1>0</ymin_item_1>
+                            <ymax_item_1>0</ymax_item_1>
+                            <graph_items>
+                                <graph_item>
+                                    <sortorder>0</sortorder>
+                                    <drawtype>0</drawtype>
+                                    <color>00C800</color>
+                                    <yaxisside>0</yaxisside>
+                                    <calc_fnc>2</calc_fnc>
+                                    <type>0</type>
+                                    <item>
+                                        <host>template zbxORA</host>
+                                        <key>inst[{#INST_NAME},uptime]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
                     <host_prototypes/>
                 </discovery_rule>
                 <discovery_rule>
@@ -836,7 +942,26 @@
                             <logtimefmt/>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes/>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{template zbxORA:parm[{#INST_NAME},{#PARAMETER},size].change()}&lt;&gt;0</expression>
+                            <name>parm[{#INST_NAME},{#PARAMETER}] changed to {ITEM.LASTVALUE}</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>1</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbxORA:parm[{#INST_NAME},{#PARAMETER},value].change()}&lt;&gt;0</expression>
+                            <name>parm[{#INST_NAME},{#PARAMETER}] changed to {ITEM.LASTVALUE}</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>1</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                    </trigger_prototypes>
                     <graph_prototypes/>
                     <host_prototypes/>
                 </discovery_rule>
@@ -1301,7 +1426,26 @@
                             <logtimefmt/>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes/>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{template zbxORA:t_ts[{#PDB},{#TS_NAME},pctfree].last()}&lt;5</expression>
+                            <name>t_ts[{#PDB},{#TS_NAME},pctfree] &lt; $1</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>2</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbxORA:t_ts[{#PDB},{#TS_NAME},pctfree].last()}&lt;2</expression>
+                            <name>t_ts[{#PDB},{#TS_NAME},pctfree] &lt; $1</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>3</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                    </trigger_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
                             <name>usage {#PDB}.{#TS_NAME} temp</name>
@@ -1556,7 +1700,26 @@
                             <logtimefmt/>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes/>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{template zbxORA:u_ts[{#PDB},{#TS_NAME},pctfree].last()}&lt;5</expression>
+                            <name>u_ts[{#PDB},{#TS_NAME},pctfree] &lt; $1</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>2</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbxORA:u_ts[{#PDB},{#TS_NAME},pctfree].last()}&lt;2</expression>
+                            <name>u_ts[{#PDB},{#TS_NAME},pctfree] &lt; $1</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>3</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                    </trigger_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
                             <name>usage {#PDB}.{#TS_NAME} undo</name>
@@ -1771,7 +1934,7 @@
                     <trigger_prototypes>
                         <trigger_prototype>
                             <expression>{template zbxORA:zbxora[query,{#SECTION},{#KEY},status].last()}&lt;&gt;0</expression>
-                            <name>zbxora[query,{#SECTION},{#KEY}] failed {ITEM.VALUE}</name>
+                            <name>zbxora[query,{#SECTION},{#KEY}] failed</name>
                             <url/>
                             <status>0</status>
                             <priority>1</priority>
@@ -1882,7 +2045,7 @@
         </trigger>
         <trigger>
             <expression>{template zbxORA:zbxora[connect,status].last()}&lt;&gt;0</expression>
-            <name>zbxora Connect {HOSTNAME} failed {ITEM.VALUE}</name>
+            <name>zbxora Connect {HOSTNAME} failed</name>
             <url/>
             <status>0</status>
             <priority>4</priority>
@@ -1891,4 +2054,114 @@
             <dependencies/>
         </trigger>
     </triggers>
+    <graphs>
+        <graph>
+            <name>zbxora cpu</name>
+            <width>900</width>
+            <height>200</height>
+            <yaxismin>0</yaxismin>
+            <yaxismax>100</yaxismax>
+            <show_work_period>1</show_work_period>
+            <show_triggers>1</show_triggers>
+            <type>0</type>
+            <show_legend>1</show_legend>
+            <show_3d>0</show_3d>
+            <percent_left>0</percent_left>
+            <percent_right>0</percent_right>
+            <ymin_type_1>0</ymin_type_1>
+            <ymax_type_1>0</ymax_type_1>
+            <ymin_item_1>0</ymin_item_1>
+            <ymax_item_1>0</ymax_item_1>
+            <graph_items>
+                <graph_item>
+                    <sortorder>0</sortorder>
+                    <drawtype>0</drawtype>
+                    <color>C80000</color>
+                    <yaxisside>0</yaxisside>
+                    <calc_fnc>2</calc_fnc>
+                    <type>0</type>
+                    <item>
+                        <host>template zbxORA</host>
+                        <key>zbxora[cpu,sys]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <drawtype>0</drawtype>
+                    <color>00C800</color>
+                    <yaxisside>0</yaxisside>
+                    <calc_fnc>2</calc_fnc>
+                    <type>0</type>
+                    <item>
+                        <host>template zbxORA</host>
+                        <key>zbxora[cpu,user]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>zbxora mem</name>
+            <width>900</width>
+            <height>200</height>
+            <yaxismin>0</yaxismin>
+            <yaxismax>100</yaxismax>
+            <show_work_period>1</show_work_period>
+            <show_triggers>1</show_triggers>
+            <type>0</type>
+            <show_legend>1</show_legend>
+            <show_3d>0</show_3d>
+            <percent_left>0</percent_left>
+            <percent_right>0</percent_right>
+            <ymin_type_1>0</ymin_type_1>
+            <ymax_type_1>0</ymax_type_1>
+            <ymin_item_1>0</ymin_item_1>
+            <ymax_item_1>0</ymax_item_1>
+            <graph_items>
+                <graph_item>
+                    <sortorder>0</sortorder>
+                    <drawtype>0</drawtype>
+                    <color>00C800</color>
+                    <yaxisside>0</yaxisside>
+                    <calc_fnc>2</calc_fnc>
+                    <type>0</type>
+                    <item>
+                        <host>template zbxORA</host>
+                        <key>zbxora[mem,maxrss]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>zbxora query ela</name>
+            <width>900</width>
+            <height>200</height>
+            <yaxismin>0</yaxismin>
+            <yaxismax>100</yaxismax>
+            <show_work_period>1</show_work_period>
+            <show_triggers>1</show_triggers>
+            <type>0</type>
+            <show_legend>1</show_legend>
+            <show_3d>0</show_3d>
+            <percent_left>0</percent_left>
+            <percent_right>0</percent_right>
+            <ymin_type_1>0</ymin_type_1>
+            <ymax_type_1>0</ymax_type_1>
+            <ymin_item_1>0</ymin_item_1>
+            <ymax_item_1>0</ymax_item_1>
+            <graph_items>
+                <graph_item>
+                    <sortorder>0</sortorder>
+                    <drawtype>0</drawtype>
+                    <color>00C800</color>
+                    <yaxisside>0</yaxisside>
+                    <calc_fnc>2</calc_fnc>
+                    <type>0</type>
+                    <item>
+                        <host>template zbxORA</host>
+                        <key>zbxora[query,,,ela]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
 </zabbix_export>
