@@ -27,7 +27,8 @@
 #          rrood 0.42 20150914 show connected user; helps debugging wallets
 #          rrood 0.43 20150915 check # columns returned for metrics; should be 2 causes zbxORA-2
 #          rrood 0.44 20150915 removed incorrect error msg
-VERSION = "0.44"
+#          rrood 0.90 20150920 added zbxora[uptime], zbxora[opentime]
+VERSION = "0.90"
 import cx_Oracle as db
 import json
 import collections
@@ -193,6 +194,7 @@ while True:
             SLEEPER = 1
             PERROR = 0
             CONMINS = 0
+            OPENTIME= int(time.time())
             while True:
                 NOWRUN = int(time.time()) # keep this to compare for when to dump stats
                 RUNTIMER = timer() # keep this to compare for when to dump stats
@@ -257,6 +259,9 @@ while True:
                 #
                 # assume we are still connected. If not, exception will tell real story
                 output(HOSTNAME, ME[0] + "[connect,status]", 0)
+                output(HOSTNAME, ME[0] + "[uptime]", int(timer() - STARTTIME))
+                output(HOSTNAME, ME[0] + "[opentime]", int(timer() - OPENTIME))
+
                 # the connect status is only real if executed a query ....
                 for section in sorted(CHECKS.sections()):
                     SectionTimer = timer() # keep this to compare for when to dump stats
