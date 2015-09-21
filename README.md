@@ -123,7 +123,7 @@ grant create session, select any dictionary, oem_monitor to cistats;
 In Oracle 12 - when using pluggable database:
 ```
 create user c##cistats identified by knowoneknows;
-alter user c##cistats set container_data all = container = current;
+alter user c##cistats set container_data = all container = current;
 grant create session, select any dictionary, oem_monitor, dv_monitor to c##cistats;
 ```
 
