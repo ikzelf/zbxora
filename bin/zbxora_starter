@@ -1,14 +1,30 @@
 #!/usr/bin/env bash
 ME=${0##*/}
 
-MON_HOME=$1
-
-if [ -z "$ORACLE_HOME" ]
+if [ -z "$ZBX_HOME" ]
 then
   . $HOME/.bash_profile
 fi
 
-cd $MON_HOME
+if [ -z "$ZBX_HOME" ]
+then
+  ZBX_HOME=$1
+fi
+
+cd $ZBX_HOME
+
+if [ -f log/$ME.lck ]
+then
+  PID=`cat log/$ME.lck`
+  ps -fp$PID |grep -v grep|grep $ME>/dev/null 2>&1
+  if [ $? -eq 0 ]
+  then
+    echo "$ME previous still running" >&2
+    exit 0
+  fi
+fi
+echo $$ > log/$ME.lck
+
 
 monitors=`ls etc/zbxora.*.cfg`
 for mon in $monitors
@@ -27,3 +43,5 @@ do
     sleep 1
   fi
 done
+
+rm log/$ME.lck

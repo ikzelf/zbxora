@@ -28,7 +28,8 @@
 #          rrood 0.43 20150915 check # columns returned for metrics; should be 2 causes zbxORA-2
 #          rrood 0.44 20150915 removed incorrect error msg
 #          rrood 0.90 20150920 added zbxora[uptime], zbxora[opentime]
-VERSION = "0.90"
+#          rrood 0.95 20150922 changed checks_prefix checks_dir/oracle/
+VERSION = "0.95"
 import cx_Oracle as db
 import json
 import collections
@@ -69,13 +70,14 @@ if not os.path.exists(OPTIONS.configfile):
 INIF = open(OPTIONS.configfile, 'r')
 CONFIG.readfp(INIF)
 DB_URL = CONFIG.get(ME[0], "db_url")
+DB_TYPE = "oracle"
 USERNAME = CONFIG.get(ME[0], "username")
 PASSWORD = CONFIG.get(ME[0], "password")
 ROLE = CONFIG.get(ME[0], "role")
 OUT_DIR = os.path.expandvars(CONFIG.get(ME[0], "out_dir"))
 OUT_FILE = os.path.join(OUT_DIR, str(os.path.splitext(os.path.basename(OPTIONS.configfile))[0]) + ".zbx")
 HOSTNAME = CONFIG.get(ME[0], "hostname")
-CHECKSFILE_PREFIX = CONFIG.get(ME[0], "checks_prefix")
+CHECKSFILE_PREFIX = CONFIG.get(ME[0], "checks_dir")
 SITE_CHECKS = CONFIG.get(ME[0], "site_checks")
 TO_ZABBIX_METHOD = CONFIG.get(ME[0], "to_zabbix_method")
 TO_ZABBIX_ARGS = os.path.expandvars(CONFIG.get(ME[0], "to_zabbix_args")) + " " + OUT_FILE
@@ -112,7 +114,7 @@ while True:
         OUT_DIR = os.path.expandvars(CONFIG.get(ME[0], "out_dir"))
         OUT_FILE = os.path.join(OUT_DIR, str(os.path.splitext(os.path.basename(OPTIONS.configfile))[0]) + ".zbx")
         HOSTNAME = CONFIG.get(ME[0], "hostname")
-        CHECKSFILE_PREFIX = CONFIG.get(ME[0], "checks_prefix")
+        CHECKSFILE_PREFIX = CONFIG.get(ME[0], "checks_dir")
         SITE_CHECKS = CONFIG.get(ME[0], "site_checks")
         TO_ZABBIX_METHOD = CONFIG.get(ME[0], "to_zabbix_method")
         TO_ZABBIX_ARGS = os.path.expandvars(CONFIG.get(ME[0], "to_zabbix_args")) + " " + OUT_FILE
@@ -169,17 +171,17 @@ while True:
                     INAME, \
                     ROLE)
             if ITYPE == "asm":
-                CHECKSFILE = CHECKSFILE_PREFIX + "." + ITYPE + "." + DBVERSION+".cfg"
+                CHECKSFILE = os.path.join(CHECKSFILE_PREFIX, DB_TYPE  , DBROL + "." + DBVERSION+".cfg")
             elif  DBROL == "PHYSICAL STANDBY":
-                CHECKSFILE = CHECKSFILE_PREFIX + "." + "standby" + "." + DBVERSION+".cfg"
+                CHECKSFILE = os.path.join(CHECKSFILE_PREFIX, DB_TYPE  , "standby" + "." + DBVERSION+".cfg")
             else:
-                CHECKSFILE = CHECKSFILE_PREFIX + "." + "primary" + "." + DBVERSION+".cfg"
+                CHECKSFILE = os.path.join(CHECKSFILE_PREFIX, DB_TYPE  , DBROL.lower() + "." + DBVERSION+".cfg")
 
             files= [ CHECKSFILE ]
             CHECKFILES = [ [ CHECKSFILE, 0]  ]
             if SITE_CHECKS != "NONE":
                 for addition in SITE_CHECKS.split(","):
-                    addfile= CHECKSFILE_PREFIX + "." + addition + ".cfg"
+                    addfile= os.path.join(CHECKSFILE_PREFIX, DB_TYPE,  addition + ".cfg")
                     CHECKFILES.extend( [ [ addfile, 0] ] )
                     files.extend( [ addfile ] )
             printf('%s using checks from %s\n',
@@ -222,6 +224,7 @@ while True:
                 if needToLoad == "yes":
                     OBJECTS_LIST = []
                     SECTIONS_LIST = []
+                    ALL_CHECKS = []
                     for i in range(len(CHECKFILES)):
                         z=CHECKFILES[i]
                         CHECKSFILE = z[0]
@@ -231,6 +234,7 @@ while True:
                         CHECKSF.close()
                         z[1]= os.stat(CHECKSFILE).st_mtime
                         CHECKFILES[i] = z
+                        ALL_CHECKS.append(CHECKS)
                         for section in sorted(CHECKS.sections()):
                             printf("%s\t%s run every %d minutes\n", \
                                 datetime.datetime.fromtimestamp(time.time()), section, \
@@ -263,73 +267,74 @@ while True:
                 output(HOSTNAME, ME[0] + "[opentime]", int(timer() - OPENTIME))
 
                 # the connect status is only real if executed a query ....
-                for section in sorted(CHECKS.sections()):
-                    SectionTimer = timer() # keep this to compare for when to dump stats
-                    if CONMINS % int(CHECKS.get(section, "minutes")) == 0:
-                        ## time to run the checks again from this section
-                        x = dict(CHECKS.items(section))
-                        CURS = conn.cursor()
-                        for key, sql  in sorted(x.iteritems()):
-                            if sql and key != "minutes":
-                                # printf ("%s DEBUG Running %s.%s\n", \
-                                    # datetime.datetime.fromtimestamp(time.time()), section, key)
-                                try:
-                                    QUERYCOUNTER += 1
-                                    START = timer()
-                                    CURS.execute(sql)
-                                    startf = timer()
-                                    # output for the query must include the complete key and value
-                                    #
-                                    rows = CURS.fetchall()
-                                    if "discover" in section:
-                                        OBJECTS_LIST = []
-                                        for row in rows:
-                                            d = collections.OrderedDict()
-                                            for col in range(0, len(CURS.description)):
-                                                d[CURS.description[col][0]] = row[col]
-                                            OBJECTS_LIST.append(d)
-                                        ROWS_JSON = '{\"data\":'+json.dumps(OBJECTS_LIST)+'}'
-                                        # printf ("DEBUG lld key: %s json: %s\n", key, ROWS_JSON)
-                                        output(HOSTNAME, key, ROWS_JSON)
-                                        output(HOSTNAME, ME[0] + "[query," + section + "," + \
-                                            key + ",status]", 0)
-                                    else:
-                                      if  len(rows) > 0 and len(rows[0]) == 2:
-                                            for row in rows:
-                                                # printf("DEBUG zabbix_host:%s zabbix_key:%s " + \
-                                                    # "value:%s\n", HOSTNAME, row[0], row[1])
-                                                output(HOSTNAME, row[0], row[1])
-                                            output(HOSTNAME, ME[0] + "[query," + section + "," + \
-                                                key + ",status]", 0)
-                                      elif len(rows) == 0:
-                                            output(HOSTNAME, ME[0] + "[query," + section + "," + \
-                                                 key + ",status]", 0)
+                for CHECKS in ALL_CHECKS:
+                  for section in sorted(CHECKS.sections()):
+                      SectionTimer = timer() # keep this to compare for when to dump stats
+                      if CONMINS % int(CHECKS.get(section, "minutes")) == 0:
+                          ## time to run the checks again from this section
+                          x = dict(CHECKS.items(section))
+                          CURS = conn.cursor()
+                          for key, sql  in sorted(x.iteritems()):
+                              if sql and key != "minutes":
+                                  # printf ("%s DEBUG Running %s.%s\n", \
+                                      # datetime.datetime.fromtimestamp(time.time()), section, key)
+                                  try:
+                                      QUERYCOUNTER += 1
+                                      START = timer()
+                                      CURS.execute(sql)
+                                      startf = timer()
+                                      # output for the query must include the complete key and value
+                                      #
+                                      rows = CURS.fetchall()
+                                      if "discover" in section:
+                                          OBJECTS_LIST = []
+                                          for row in rows:
+                                              d = collections.OrderedDict()
+                                              for col in range(0, len(CURS.description)):
+                                                  d[CURS.description[col][0]] = row[col]
+                                              OBJECTS_LIST.append(d)
+                                          ROWS_JSON = '{\"data\":'+json.dumps(OBJECTS_LIST)+'}'
+                                          # printf ("DEBUG lld key: %s json: %s\n", key, ROWS_JSON)
+                                          output(HOSTNAME, key, ROWS_JSON)
+                                          output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                              key + ",status]", 0)
                                       else:
-                                            printf('%s key=%s.%s zbxORA-%d: SQL format error: %s\n', \
-                                                  datetime.datetime.fromtimestamp(time.time()), \
-                                                  section, key, 2, "expect key,value pairs")
-                                            output(HOSTNAME, ME[0] + "[query," + section + "," + \
-                                                 key + ",status]", 2)
-                                    fetchela = timer() - startf
-                                    ELAPSED = timer() - START
-                                    output(HOSTNAME, ME[0] + "[query," + section + "," + \
-                                        key + ",ela]", ELAPSED)
-                                    output(HOSTNAME, ME[0] + "[query," + section + "," + \
-                                        key + ",fetch]", fetchela)
-                                except db.DatabaseError as oerr:
-                                    ERROR, = oerr.args
-                                    ELAPSED = timer() - START
-                                    QUERYERROR += 1
-                                    output(HOSTNAME, ME[0] + "[query," + section + "," + \
-                                        key + ",status]", ERROR.code)
-                                    printf('%s key=%s.%s ORA-%d: Database execution error: %s\n', \
-                                        datetime.datetime.fromtimestamp(time.time()), \
-                                        section, key, ERROR.code, ERROR.message.strip())
-                                    if ERROR.code in(28, 1012, 3113, 3114, 3135):
-                                        raise
-                        # end of a section
-                        output(HOSTNAME, ME[0] + "[query," + section + ",,ela]", \
-                            timer() - SectionTimer)
+                                        if  len(rows) > 0 and len(rows[0]) == 2:
+                                              for row in rows:
+                                                  # printf("DEBUG zabbix_host:%s zabbix_key:%s " + \
+                                                      # "value:%s\n", HOSTNAME, row[0], row[1])
+                                                  output(HOSTNAME, row[0], row[1])
+                                              output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                                  key + ",status]", 0)
+                                        elif len(rows) == 0:
+                                              output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                                   key + ",status]", 0)
+                                        else:
+                                              printf('%s key=%s.%s zbxORA-%d: SQL format error: %s\n', \
+                                                    datetime.datetime.fromtimestamp(time.time()), \
+                                                    section, key, 2, "expect key,value pairs")
+                                              output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                                   key + ",status]", 2)
+                                      fetchela = timer() - startf
+                                      ELAPSED = timer() - START
+                                      output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                          key + ",ela]", ELAPSED)
+                                      output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                          key + ",fetch]", fetchela)
+                                  except db.DatabaseError as oerr:
+                                      ERROR, = oerr.args
+                                      ELAPSED = timer() - START
+                                      QUERYERROR += 1
+                                      output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                          key + ",status]", ERROR.code)
+                                      printf('%s key=%s.%s ORA-%d: Database execution error: %s\n', \
+                                          datetime.datetime.fromtimestamp(time.time()), \
+                                          section, key, ERROR.code, ERROR.message.strip())
+                                      if ERROR.code in(28, 1012, 3113, 3114, 3135):
+                                          raise
+                          # end of a section
+                          output(HOSTNAME, ME[0] + "[query," + section + ",,ela]", \
+                              timer() - SectionTimer)
                 # dump metric for summed elapsed time of this run
                 output(HOSTNAME, ME[0] + "[query,,,ela]", timer() - RUNTIMER)
                 output(HOSTNAME, ME[0] + "[cpu,user]",  resource.getrusage(resource.RUSAGE_SELF).ru_utime)

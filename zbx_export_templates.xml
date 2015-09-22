@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>2.0</version>
-    <date>2015-09-21T14:36:31Z</date>
+    <date>2015-09-22T16:25:21Z</date>
     <groups>
         <group>
             <name>TEMPLATES</name>
@@ -585,20 +585,20 @@
                             <type>0</type>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{template zbxORA:dgrp[{#DGRP},pctfree].last()}&lt;10</expression>
-                            <name>dg[{#DGRP},pctfree] &lt; $1</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>2</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
                             <expression>{template zbxORA:dgrp[{#DGRP},pctfree].last()}&lt;20</expression>
                             <name>dg[{#DGRP},pctfree] &lt; $1</name>
                             <url/>
                             <status>0</status>
                             <priority>1</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbxORA:dgrp[{#DGRP},pctfree].last()}&lt;10</expression>
+                            <name>dg[{#DGRP},pctfree] &lt; $1</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>2</priority>
                             <description/>
                             <type>0</type>
                         </trigger_prototype>
@@ -2162,19 +2162,24 @@
                     <host_prototypes/>
                 </discovery_rule>
             </discovery_rules>
-            <macros/>
+            <macros>
+                <macro>
+                    <macro>{$ZBXORA_NODATA}</macro>
+                    <value>30m</value>
+                </macro>
+            </macros>
             <templates/>
             <screens/>
         </template>
     </templates>
     <triggers>
         <trigger>
-            <expression>{template zbxORA:zbxora[connect,status].nodata(30m)}&lt;&gt;0</expression>
-            <name>zbxora Connect nodata {HOSTNAME}</name>
+            <expression>{template zbxORA:zbxora[connect,status].nodata({$ZBXORA_NODATA})}&lt;&gt;0</expression>
+            <name>zbxora Connect nodata {HOSTNAME} since {$ZBXORA_NODATA}</name>
             <url/>
             <status>0</status>
             <priority>1</priority>
-            <description>geen info mbt zbxora gedurende periode</description>
+            <description>no info received during a long period</description>
             <type>0</type>
             <dependencies/>
         </trigger>
