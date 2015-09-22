@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# free clonable from https://github.com/ikzelf/zbxora/
+# (@) ronald.rood@ciber.com follow @ik_zelf on twitter
+# follow @zbxora on twitter
+# push your added items/checks using git
 """options: -c/--cfile configFile
                      configFile contains config for 1 database and
                                 a reference to the checks"""

@@ -1,5 +1,6 @@
 # zbxora
 Zabbix Oracle monitoring plugin
+Downloadable from https://github.com/ikzelf/zbxora
 
 Written in python, tested with python 2.6 and 2.7.
 Using cx_Oracle
@@ -20,18 +21,16 @@ sample config:
 database config files:
 - `etc/zbxora.fsdb02.cfg`
 
-template for database config file: (copy to zbxora.{configname}.cfg)
-- `etc/zbxora_config_template.cfg`
-
 default checks files:
-- `etc/zbxora_checks.asm.11.cfg`
-- `etc/zbxora_checks.primary.11.cfg`
-- `etc/zbxora_checks.primary.12.cfg`
-- `etc/zbxora_checks.standby.11.cfg`
+- `etc/zbxora_checks/oracle/asm.11.cfg`
+- `etc/zbxora_checks/oracle/asm.12.cfg`
+- `etc/zbxora_checks/oracle/primary.11.cfg`
+- `etc/zbxora_checks/oracle/primary.12.cfg`
+- `etc/zbxora_checks/oracle/standby.11.cfg`
 
 site checks files - examples:
-- `etc/zbxora_checks.ebs.cfg`
-- `etc/zbxora_checks.sap.cfg`
+- `etc/zbxora_checks/oracle/ebs.cfg.example`
+- `etc/zbxora_checks/oracle/sap.cfg.example`
 
 
 example config file: zbxora.fsdb02.cfg
@@ -45,7 +44,7 @@ role: normal
 # for ASM instance role should be SYSDBA
 out_dir: $HOME/zbxora_out
 hostname: testhost
-checks_prefix: etc/zbxora_checks
+checks_dir: etc/zbxora_checks
 site_checks: sap,ebs
 to_zabbix_method: NOzabbix_sender
 # if to_zabbix_method is zabbix_sender, every cycle a sender process is started
@@ -96,12 +95,12 @@ For pluggable database, just connect to a global account to monitor all plugins
 # zbxora_starter:
 this is an aide to [re]start zbxora in an orderly way. Put it in the crontab, every minute.
 It will check the etc directory (note the lack of a leading '/') and start the configuration
-files named zbxora.{you_config}.cfg, each given their own logfile. Notice the sleep in the start
+files named zbxora.{your_config}.cfg, each given their own logfile. Notice the sleep in the start
 sequence. This is done to make sure not all concurrently running zbxora sessions awake at
 the same moment. Now their awakenings is separated by a second.
 
 # zbxora_sender:
-This convenient when monitoring lot's of databases from one client. In that case it is more
+This is convenient when monitoring lot's of databases from one client. In that case it is more
 efficient to collect all output files in zbxora_out/ and upload them in one session to zabbix.
 It is possible to have zbxora call zabbix_sender but this is not implemented in the most
 efficient way.
