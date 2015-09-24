@@ -33,7 +33,8 @@
 #          rrood 0.44 20150915 removed incorrect error msg
 #          rrood 0.90 20150920 added zbxora[uptime], zbxora[opentime]
 #          rrood 0.95 20150922 changed checks_prefix checks_dir/oracle/
-VERSION = "0.95"
+#          rrood 0.96 20150924 added at connect only option (minutes=0)
+VERSION = "0.96"
 import cx_Oracle as db
 import json
 import collections
@@ -240,9 +241,14 @@ while True:
                         CHECKFILES[i] = z
                         ALL_CHECKS.append(CHECKS)
                         for section in sorted(CHECKS.sections()):
-                            printf("%s\t%s run every %d minutes\n", \
-                                datetime.datetime.fromtimestamp(time.time()), section, \
-                                int(CHECKS.get(section, "minutes")))
+                            secMins = int(CHECKS.get(section, "minutes"))
+                            if secMins == 0:
+                                printf("%s\t%s run at connect only\n", \
+                                    datetime.datetime.fromtimestamp(time.time()), section)
+                            else:
+                                printf("%s\t%s run every %d minutes\n", \
+                                    datetime.datetime.fromtimestamp(time.time()), section, \
+                                    secMins)
                             # dump own discovery items of the queries per section
                             E = collections.OrderedDict()
                             E = {"{#SECTION}": section}
@@ -274,7 +280,8 @@ while True:
                 for CHECKS in ALL_CHECKS:
                   for section in sorted(CHECKS.sections()):
                       SectionTimer = timer() # keep this to compare for when to dump stats
-                      if CONMINS % int(CHECKS.get(section, "minutes")) == 0:
+                      secMins = int(CHECKS.get(section, "minutes"))
+                      if  (CONMINS == 0 and secMins == 0) or ( secMins > 0 and CONMINS % secMins == 0):
                           ## time to run the checks again from this section
                           x = dict(CHECKS.items(section))
                           CURS = conn.cursor()
