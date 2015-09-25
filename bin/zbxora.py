@@ -33,7 +33,7 @@
 #          rrood 0.44 20150915 removed incorrect error msg
 #          rrood 0.90 20150920 added zbxora[uptime], zbxora[opentime]
 #          rrood 0.95 20150922 changed checks_prefix checks_dir/oracle/
-#          rrood 0.96 20150924 added at connect only option (minutes=0)
+#          rrood 0.96 20150924 added at connect only option (minutes=0) + report format/read error
 VERSION = "0.96"
 import cx_Oracle as db
 import json
@@ -209,7 +209,6 @@ while True:
                     OUTF = open(OUT_FILE, "a")
                 else:
                     OUTF = open(OUT_FILE, "w")
-                output(HOSTNAME, ME[0] + "[version]", VERSION)
                 # loading checks from the various checkfiles:
                 needToLoad = "no"
                 for i in range(len(CHECKFILES)):
@@ -227,17 +226,47 @@ while True:
                             needToLoad = "yes"
                     
                 if needToLoad == "yes":
+                    output(HOSTNAME, ME[0] + "[version]", VERSION) # try once in a while
                     OBJECTS_LIST = []
                     SECTIONS_LIST = []
+                    FILES_LIST = []
                     ALL_CHECKS = []
                     for i in range(len(CHECKFILES)):
                         z=CHECKFILES[i]
                         CHECKSFILE = z[0]
-                        CHECKSF = open(CHECKSFILE, 'r')
+                        E = collections.OrderedDict()
+                        E = {"{#CHECKS_FILE}": CHECKSFILE}
+                        FILES_LIST.append(E)
+
+                    FILES_JSON = '{\"data\":'+json.dumps(FILES_LIST)+'}'
+                    output(HOSTNAME, ME[0]+".files.lld", FILES_JSON)
+                    CRASH=0
+                    for i in range(len(CHECKFILES)):
+                        z=CHECKFILES[i]
+                        CHECKSFILE = z[0]
                         CHECKS = ConfigParser.RawConfigParser()
-                        CHECKS.readfp(CHECKSF)
-                        CHECKSF.close()
+                        try:
+                            CHECKSF = open(CHECKSFILE, 'r')
+                            output(HOSTNAME, ME[0] + "[" + CHECKSFILE + ",lmod]", str(int(os.stat(CHECKSFILE).st_mtime)))
+                            try:
+                                CHECKS.readfp(CHECKSF)
+                                CHECKSF.close()
+                                output(HOSTNAME, ME[0] + "[" + CHECKSFILE + ",status]", 0)
+                            except:
+                                output(HOSTNAME, ME[0] + "[" + CHECKSFILE + ",status]", 13)
+                                printf("%s\tfile %s has parsing errors (13)\n", \
+                                    datetime.datetime.fromtimestamp(time.time()), CHECKSFILE)
+                                # CRASH=13
+                                # raise
+                        except:
+                            output(HOSTNAME, ME[0] + "[" + CHECKSFILE + ",status]",  11)
+                            printf("%s\tfile %s does not exits or not readable (11)\n", \
+                                datetime.datetime.fromtimestamp(time.time()), CHECKSFILE)
+                            CRASH=11
+                            # raise
+
                         z[1]= os.stat(CHECKSFILE).st_mtime
+
                         CHECKFILES[i] = z
                         ALL_CHECKS.append(CHECKS)
                         for section in sorted(CHECKS.sections()):
@@ -387,6 +416,11 @@ while True:
                     STOUT.close()
 
                 OUTF.close()
+                if CRASH > 0:
+                    printf("%s crashing due to error %d\n", \
+                        datetime.datetime.fromtimestamp(time.time()), \
+                        CRASH)
+                    sys.exit(CRASH)
                 # try to keep activities on the same starting second:
                 SLEEPTIME = 60 - ((int(time.time()) - STARTTIME) % 60)
                 # printf ("%s DEBUG Sleeping for %d seconds\n", \
