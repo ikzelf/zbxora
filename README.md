@@ -108,6 +108,24 @@ efficient way.
 TODO: make zbxora.py open a pipe to zabbix_sender and use that all the time instead of opening
 a new session every minute.
 
+# self monitoring:
+zbxORA also does some self monitoring. For that it starts with finding the checks files that
+are needed for the particular configuration. It creates an lld array for the files so
+it can report status and last modification times on those files. If the file happens to be
+unreadable, or gives parsing errors, the status reflects that. lmod lists the files last 
+modification times so it is easy to find when something changed, in zabbix, instead of having 
+to search log files.
+Also the query status and performance is reported. If a query fails, the error code is in the
+queries status column ( zbxora[query,{#SECTION},key,status] ). This key is not necasarily the 
+item key that the query reports to. Some queries, like those that report tablespace usage, report
+for many keys .... During upgrades, the zbxora[query,{#SECTION},key,ela] can give a quick
+view on how the upgrade influences the performance...
+
+# on connect only queries
+zbxORA uses the sections that have minutes = 0 for a special case: run only once, after logon to the
+database. This is fine for items like version, that are not often changed while connected to
+the database. This saves a lot of space compared to having to run - and store - this info every hour.
+
 # Warning:
 Use the code at your own risk. It is tested and seems to be functional. Use an account with the
 least required privileges, both on OS as on database leven.
