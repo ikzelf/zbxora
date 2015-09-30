@@ -34,7 +34,8 @@
 #          rrood 0.90 20150920 added zbxora[uptime], zbxora[opentime]
 #          rrood 0.95 20150922 changed checks_prefix checks_dir/oracle/
 #          rrood 0.96 20150924 added at connect only option (minutes=0) + report format/read error
-VERSION = "0.96"
+#          rrood 0.97 20150924 changed zbxora[{checksfile}] to proper key value zbbxora[checksN,name]
+VERSION = "0.97"
 import cx_Oracle as db
 import json
 import collections
@@ -94,9 +95,10 @@ CONNECTERROR = 0
 QUERYCOUNTER = 0
 QUERYERROR = 0
 STARTTIME = int(time.time())
-printf("%s start %s-%s pid=%s Connecting...\n", \
+printf("%s start %s-%s pid=%s Connecting for hostname %s...\n", \
     datetime.datetime.fromtimestamp(STARTTIME), \
-    ME[0], VERSION, os.getpid())
+    ME[0], VERSION, os.getpid(), HOSTNAME
+    )
 if SITE_CHECKS != "NONE":
     printf("%s site_checks: %s\n", \
         datetime.datetime.fromtimestamp(time.time()), SITE_CHECKS)
@@ -235,7 +237,7 @@ while True:
                         z=CHECKFILES[i]
                         CHECKSFILE = z[0]
                         E = collections.OrderedDict()
-                        E = {"{#CHECKS_FILE}": CHECKSFILE}
+                        E = {"{#CHECKS_FILE}": i}
                         FILES_LIST.append(E)
 
                     FILES_JSON = '{\"data\":'+json.dumps(FILES_LIST)+'}'
@@ -247,19 +249,20 @@ while True:
                         CHECKS = ConfigParser.RawConfigParser()
                         try:
                             CHECKSF = open(CHECKSFILE, 'r')
-                            output(HOSTNAME, ME[0] + "[" + CHECKSFILE + ",lmod]", str(int(os.stat(CHECKSFILE).st_mtime)))
+                            output(HOSTNAME, ME[0] + "[checks," + str(i) + ",name]", CHECKSFILE )
+                            output(HOSTNAME, ME[0] + "[checks," + str(i) + ",lmod]", str(int(os.stat(CHECKSFILE).st_mtime)))
                             try:
                                 CHECKS.readfp(CHECKSF)
                                 CHECKSF.close()
-                                output(HOSTNAME, ME[0] + "[" + CHECKSFILE + ",status]", 0)
+                                output(HOSTNAME, ME[0] + "[checks," + str(i) + ",status]", 0)
                             except:
-                                output(HOSTNAME, ME[0] + "[" + CHECKSFILE + ",status]", 13)
+                                output(HOSTNAME, ME[0] + "[checks," + str(i) + ",status]", 13)
                                 printf("%s\tfile %s has parsing errors (13)\n", \
                                     datetime.datetime.fromtimestamp(time.time()), CHECKSFILE)
                                 # CRASH=13
                                 # raise
                         except:
-                            output(HOSTNAME, ME[0] + "[" + CHECKSFILE + ",status]",  11)
+                            output(HOSTNAME, ME[0] + "[checks," + str(i) + ",status]",  11)
                             printf("%s\tfile %s does not exits or not readable (11)\n", \
                                 datetime.datetime.fromtimestamp(time.time()), CHECKSFILE)
                             CRASH=11
