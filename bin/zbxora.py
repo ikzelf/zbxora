@@ -35,7 +35,8 @@
 #          rrood 0.95 20150922 changed checks_prefix checks_dir/oracle/
 #          rrood 0.96 20150924 added at connect only option (minutes=0) + report format/read error
 #          rrood 0.97 20150924 changed zbxora[{checksfile}] to proper key value zbbxora[checksN,name]
-VERSION = "0.97"
+#          rrood 0.98 20150924 zbxora[uptime] reported in connect exception
+VERSION = "0.98"
 import cx_Oracle as db
 import json
 import collections
@@ -439,6 +440,7 @@ while True:
             # from a killed session or similar
             CONNECTERROR += 1
         output(HOSTNAME, ME[0] + "[connect,status]", ERROR.code)
+        output(HOSTNAME, ME[0] + "[uptime]", int(timer() - STARTTIME))
         if ERROR.code == 15000:
             printf('%s: connection error: %s for %s@%s %s\n', \
                 datetime.datetime.fromtimestamp(time.time()), \
