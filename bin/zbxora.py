@@ -55,7 +55,7 @@ import threading
 from optparse import OptionParser
 from timeit import default_timer as timer
 
-timeout=60.0
+timeout=120.0
 
 def printf(format, *args):
     """just a simple c-style printf function"""
