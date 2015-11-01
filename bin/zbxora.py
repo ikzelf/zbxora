@@ -36,7 +36,8 @@
 #          rrood 0.96 20150924 added at connect only option (minutes=0) + report format/read error
 #          rrood 0.97 20150924 changed zbxora[{checksfile}] to proper key value zbbxora[checksN,name]
 #          rrood 0.98 20150924 zbxora[uptime] reported in connect exception
-VERSION = "0.98"
+#          rrood 0.99 20151031 added sql timeout to handle ora-257 hang situations
+VERSION = "0.99"
 import cx_Oracle as db
 import json
 import collections
@@ -49,9 +50,12 @@ import ConfigParser
 import resource
 import gc
 import subprocess
+import threading
 # import shutil
 from optparse import OptionParser
 from timeit import default_timer as timer
+
+timeout=60.0
 
 def printf(format, *args):
     """just a simple c-style printf function"""
@@ -324,6 +328,8 @@ while True:
                                       # datetime.datetime.fromtimestamp(time.time()), section, key)
                                   try:
                                       QUERYCOUNTER += 1
+                                      sqltimeout = threading.Timer(timeout,conn.cancel)
+                                      sqltimeout.start()
                                       START = timer()
                                       CURS.execute(sql)
                                       startf = timer()
@@ -359,6 +365,7 @@ while True:
                                                     section, key, 2, "expect key,value pairs")
                                               output(HOSTNAME, ME[0] + "[query," + section + "," + \
                                                    key + ",status]", 2)
+                                      sqltimeout.cancel()
                                       fetchela = timer() - startf
                                       ELAPSED = timer() - START
                                       output(HOSTNAME, ME[0] + "[query," + section + "," + \
@@ -371,10 +378,12 @@ while True:
                                       QUERYERROR += 1
                                       output(HOSTNAME, ME[0] + "[query," + section + "," + \
                                           key + ",status]", ERROR.code)
+                                      output(HOSTNAME, ME[0] + "[query," + section + "," + \
+                                          key + ",ela]", ELAPSED)
                                       printf('%s key=%s.%s ORA-%d: Database execution error: %s\n', \
                                           datetime.datetime.fromtimestamp(time.time()), \
                                           section, key, ERROR.code, ERROR.message.strip())
-                                      if ERROR.code in(28, 1012, 3113, 3114, 3135):
+                                      if ERROR.code in(28, 1012, 1013, 3113, 3114, 3135):
                                           raise
                           # end of a section
                           output(HOSTNAME, ME[0] + "[query," + section + ",,ela]", \
