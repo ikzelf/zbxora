@@ -55,8 +55,6 @@ import threading
 from optparse import OptionParser
 from timeit import default_timer as timer
 
-timeout=120.0
-
 def printf(format, *args):
     """just a simple c-style printf function"""
     sys.stdout.write(format % args)
@@ -189,6 +187,13 @@ while True:
             else:
                 CHECKSFILE = os.path.join(CHECKSFILE_PREFIX, DB_TYPE  , DBROL.lower() + "." + DBVERSION+".cfg")
 
+            try:
+              SQLTIMEOUT = CONFIG.get(ME[0], "sql_timeout")
+            except:
+              SQLTIMEOUT = 60.0
+              printf('%s using sql_timeout %d\n',
+                      datetime.datetime.fromtimestamp(time.time()), \
+                      SQLTIMEOUT)
             files= [ CHECKSFILE ]
             CHECKFILES = [ [ CHECKSFILE, 0]  ]
             if SITE_CHECKS != "NONE":
@@ -328,7 +333,7 @@ while True:
                                       # datetime.datetime.fromtimestamp(time.time()), section, key)
                                   try:
                                       QUERYCOUNTER += 1
-                                      sqltimeout = threading.Timer(timeout,conn.cancel)
+                                      sqltimeout = threading.Timer(SQLTIMEOUT,conn.cancel)
                                       sqltimeout.start()
                                       START = timer()
                                       CURS.execute(sql)
