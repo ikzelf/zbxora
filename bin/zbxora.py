@@ -188,10 +188,10 @@ while True:
                 CHECKSFILE = os.path.join(CHECKSFILE_PREFIX, DB_TYPE  , DBROL.lower() + "." + DBVERSION+".cfg")
 
             try:
-              SQLTIMEOUT = CONFIG.get(ME[0], "sql_timeout")
+              SQLTIMEOUT = float(CONFIG.get(ME[0], "sql_timeout"))
             except:
               SQLTIMEOUT = 60.0
-              printf('%s using sql_timeout %d\n',
+            printf('%s using sql_timeout %d\n',
                       datetime.datetime.fromtimestamp(time.time()), \
                       SQLTIMEOUT)
             files= [ CHECKSFILE ]
@@ -341,6 +341,10 @@ while True:
                                       # output for the query must include the complete key and value
                                       #
                                       rows = CURS.fetchall()
+                                      if os.path.exists(OUT_FILE):
+                                          OUTF = open(OUT_FILE, "a")
+                                      else:
+                                          OUTF = open(OUT_FILE, "w")
                                       if "discover" in section:
                                           OBJECTS_LIST = []
                                           for row in rows:
@@ -378,6 +382,10 @@ while True:
                                       output(HOSTNAME, ME[0] + "[query," + section + "," + \
                                           key + ",fetch]", fetchela)
                                   except db.DatabaseError as oerr:
+                                      if os.path.exists(OUT_FILE):
+                                          OUTF = open(OUT_FILE, "a")
+                                      else:
+                                          OUTF = open(OUT_FILE, "w")
                                       ERROR, = oerr.args
                                       ELAPSED = timer() - START
                                       QUERYERROR += 1
@@ -433,7 +441,7 @@ while True:
 
                     STOUT.close()
 
-                OUTF.close()
+                # OUTF.close()
                 if CRASH > 0:
                     printf("%s crashing due to error %d\n", \
                         datetime.datetime.fromtimestamp(time.time()), \
@@ -450,10 +458,10 @@ while True:
     except db.DatabaseError as oerr:
         ERROR, = oerr.args
         ELAPSED = timer() - START
-        if ERROR.code not in (1012, 3114):
+        if ERROR.code not in (1012, 1013, 3114):
             # from a killed session or similar
             CONNECTERROR += 1
-        output(HOSTNAME, ME[0] + "[connect,status]", ERROR.code)
+            output(HOSTNAME, ME[0] + "[connect,status]", ERROR.code)
         output(HOSTNAME, ME[0] + "[uptime]", int(timer() - STARTTIME))
         if ERROR.code == 15000:
             printf('%s: connection error: %s for %s@%s %s\n', \
