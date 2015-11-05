@@ -37,7 +37,8 @@
 #          rrood 0.97 20150924 changed zbxora[{checksfile}] to proper key value zbbxora[checksN,name]
 #          rrood 0.98 20150924 zbxora[uptime] reported in connect exception
 #          rrood 0.99 20151031 added sql timeout to handle ora-257 hang situations
-VERSION = "0.99"
+#          rrood 1.00 20151105 added auto restart if zbxora.py changed
+VERSION = "1.00"
 import cx_Oracle as db
 import json
 import collections
@@ -91,6 +92,7 @@ SITE_CHECKS = CONFIG.get(ME[0], "site_checks")
 TO_ZABBIX_METHOD = CONFIG.get(ME[0], "to_zabbix_method")
 TO_ZABBIX_ARGS = os.path.expandvars(CONFIG.get(ME[0], "to_zabbix_args")) + " " + OUT_FILE
 INIF.close()
+CHECKFILES = [ [__file__, os.stat( __file__ ).st_mtime] ]
 CHECKSCHANGED = [ 0 ]
 
 CONNECTCOUNTER = 0
@@ -114,6 +116,14 @@ SLEEPER = 1
 PERROR = 0
 while True:
     try:
+        z=CHECKFILES[0]
+        CHECKSFILE = z[0]
+        CHECKSCHANGED = z[1]
+        if CHECKSCHANGED != os.stat(CHECKSFILE).st_mtime:
+            printf("%s %s changed, restarting ...\n",
+                datetime.datetime.fromtimestamp(time.time()), CHECKSFILE)
+            os.execv(__file__, sys.argv)
+
         CONFIG = ConfigParser.RawConfigParser()
         INIF = open(OPTIONS.configfile, 'r')
         CONFIG.readfp(INIF)
@@ -195,7 +205,7 @@ while True:
                       datetime.datetime.fromtimestamp(time.time()), \
                       SQLTIMEOUT)
             files= [ CHECKSFILE ]
-            CHECKFILES = [ [ CHECKSFILE, 0]  ]
+            CHECKFILES.extend([ [CHECKSFILE, 0] ] )
             if SITE_CHECKS != "NONE":
                 for addition in SITE_CHECKS.split(","):
                     addfile= os.path.join(CHECKSFILE_PREFIX, DB_TYPE,  addition + ".cfg")
@@ -228,14 +238,19 @@ while True:
                     CHECKSFILE = z[0]
                     CHECKSCHANGED = z[1]
                     if CHECKSCHANGED != os.stat(CHECKSFILE).st_mtime:
-                        if CHECKSCHANGED == 0:
-                            printf("%s checks loading %s\n", \
+                        if i == 0:
+                            printf("%s %s changed, restarting ...\n",
                                 datetime.datetime.fromtimestamp(time.time()), CHECKSFILE)
-                            needToLoad = "yes"
+                            os.execv(__file__, sys.argv)
                         else:
-                            printf("%s checks changed, reloading %s\n", \
-                                datetime.datetime.fromtimestamp(time.time()), CHECKSFILE)
-                            needToLoad = "yes"
+                            if CHECKSCHANGED == 0:
+                                printf("%s checks loading %s\n", \
+                                    datetime.datetime.fromtimestamp(time.time()), CHECKSFILE)
+                                needToLoad = "yes"
+                            else:
+                                printf("%s checks changed, reloading %s\n", \
+                                    datetime.datetime.fromtimestamp(time.time()), CHECKSFILE)
+                                needToLoad = "yes"
                     
                 if needToLoad == "yes":
                     output(HOSTNAME, ME[0] + "[version]", VERSION) # try once in a while
@@ -253,7 +268,7 @@ while True:
                     FILES_JSON = '{\"data\":'+json.dumps(FILES_LIST)+'}'
                     output(HOSTNAME, ME[0]+".files.lld", FILES_JSON)
                     CRASH=0
-                    for i in range(len(CHECKFILES)):
+                    for i in range(1, len(CHECKFILES)):
                         z=CHECKFILES[i]
                         CHECKSFILE = z[0]
                         CHECKS = ConfigParser.RawConfigParser()
