@@ -135,6 +135,13 @@ Since zabbix does not -yet- export value mappings, first create them with follow
   - 2 ⇒ ERROR
   - 3 ⇒ UNK
 
+  zbxora db.openstatus
+  - 0 ⇒ *unknown*
+  - 1 ⇒ MOUNTED
+  - 2 ⇒ READ ONLY
+  - 3 ⇒ READ WRITE
+  - 4 ⇒ READ ONLY WITH APPLY
+
   zbxora rman status
   - 0 ⇒ COMPLETED
   - 1 ⇒ FAILED
