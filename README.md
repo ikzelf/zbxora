@@ -144,7 +144,8 @@ Since zabbix does not -yet- export value mappings, first create them with follow
   - 5 ⇒ RUNNING
   - 9 ⇒ unk
 
-  zbxora[checks,status] 0 ⇒ OK
+  zbxora[checks,status] 
+  -  0 ⇒ OK
   - 11 ⇒ unreadable
   - 13 ⇒ parse error[s]
 
