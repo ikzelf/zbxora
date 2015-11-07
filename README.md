@@ -135,7 +135,7 @@ Since zabbix does not -yet- export value mappings, first create them with follow
   - 2 ⇒ ERROR
   - 3 ⇒ UNK
 
-  zbxora rman status  
+  zbxora rman status
   - 0 ⇒ COMPLETED
   - 1 ⇒ FAILED
   - 2 ⇒ COMPLETED WITH WARNINGS
@@ -149,10 +149,10 @@ Since zabbix does not -yet- export value mappings, first create them with follow
   - 11 ⇒ unreadable
   - 13 ⇒ parse error[s]
 
-  zbxora[connect,status]  
+  zbxora[connect,status]
   - 0 ⇒ OK
 
-  zbxora[query,,,status]  
+  zbxora[query,,,status]
   - 0 ⇒ OK
 
 # Warning:

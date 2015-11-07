@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>2.0</version>
-    <date>2015-09-30T11:23:43Z</date>
+    <date>2015-11-07T15:22:38Z</date>
     <groups>
         <group>
             <name>TEMPLATES</name>
@@ -20,6 +20,9 @@
             <applications>
                 <application>
                     <name>ASM</name>
+                </application>
+                <application>
+                    <name>backup</name>
                 </application>
                 <application>
                     <name>db</name>
@@ -119,10 +122,10 @@
                     <history>7</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>3</value_type>
+                    <value_type>0</value_type>
                     <allowed_hosts/>
                     <units/>
-                    <delta>2</delta>
+                    <delta>1</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
                     <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -231,7 +234,7 @@
                     <inventory_link>0</inventory_link>
                     <applications>
                         <application>
-                            <name>zbxora</name>
+                            <name>db</name>
                         </application>
                     </applications>
                     <valuemap>
@@ -542,6 +545,185 @@
                 </item>
             </items>
             <discovery_rules>
+                <discovery_rule>
+                    <name>arl_dest.lld</name>
+                    <type>2</type>
+                    <snmp_community/>
+                    <snmp_oid/>
+                    <key>arl_dest.lld</key>
+                    <delay>0</delay>
+                    <status>0</status>
+                    <allowed_hosts/>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <filter>
+                        <evaltype>0</evaltype>
+                        <formula/>
+                        <conditions/>
+                    </filter>
+                    <lifetime>30</lifetime>
+                    <description>active archive log destinations</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>arl_dest[{#INST_NAME},{#ARL_DEST},error]</name>
+                            <type>2</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>arl_dest[{#INST_NAME},{#ARL_DEST},error]</key>
+                            <delay>0</delay>
+                            <history>90</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>4</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>backup</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>arl_dest[{#INST_NAME},{#ARL_DEST},sequence]</name>
+                            <type>2</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>arl_dest[{#INST_NAME},{#ARL_DEST},sequence]</key>
+                            <delay>0</delay>
+                            <history>7</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>backup</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>arl_dest[{#INST_NAME},{#ARL_DEST},status]</name>
+                            <type>2</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>arl_dest[{#INST_NAME},{#ARL_DEST},status]</key>
+                            <delay>0</delay>
+                            <history>7</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>archive destination status</description>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>backup</name>
+                                </application>
+                            </applications>
+                            <valuemap>
+                                <name>zbxora arl_dest</name>
+                            </valuemap>
+                            <logtimefmt/>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{template zbxORA:arl_dest[{#INST_NAME},{#ARL_DEST},status].last(30m)}&gt;1</expression>
+                            <name>arl_dest[{#INST_NAME,{#ARL_DEST}] ! VALID</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description>ARL destination not in (VALID(0) and DEFERRED(1))</description>
+                            <type>0</type>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes/>
+                    <host_prototypes/>
+                </discovery_rule>
                 <discovery_rule>
                     <name>ASM dgroups</name>
                     <type>2</type>
@@ -856,7 +1038,7 @@
                                 </application>
                             </applications>
                             <valuemap>
-                                <name>db.openstatus</name>
+                                <name>zbxora db.openstatus</name>
                             </valuemap>
                             <logtimefmt/>
                         </item_prototype>
@@ -1530,6 +1712,344 @@
                     <host_prototypes/>
                 </discovery_rule>
                 <discovery_rule>
+                    <name>rman.lld</name>
+                    <type>2</type>
+                    <snmp_community/>
+                    <snmp_oid/>
+                    <key>rman.lld</key>
+                    <delay>0</delay>
+                    <status>0</status>
+                    <allowed_hosts/>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <filter>
+                        <evaltype>0</evaltype>
+                        <formula/>
+                        <conditions/>
+                    </filter>
+                    <lifetime>0</lifetime>
+                    <description>rman backup info by object_type from v$rman_status</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>rman[{#OBJ_TYPE},age]</name>
+                            <type>2</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>rman[{#OBJ_TYPE},age]</key>
+                            <delay>0</delay>
+                            <history>7</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>s</units>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>backup</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>rman[{#OBJ_TYPE},ela]</name>
+                            <type>2</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>rman[{#OBJ_TYPE},ela]</key>
+                            <delay>0</delay>
+                            <history>7</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>s</units>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>backup</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>rman[{#OBJ_TYPE},input]</name>
+                            <type>2</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>rman[{#OBJ_TYPE},input]</key>
+                            <delay>0</delay>
+                            <history>7</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>B</units>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>backup</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>rman[{#OBJ_TYPE},output]</name>
+                            <type>2</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>rman[{#OBJ_TYPE},output]</key>
+                            <delay>0</delay>
+                            <history>7</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>B</units>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>backup</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>rman[{#OBJ_TYPE},status]</name>
+                            <type>2</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>rman[{#OBJ_TYPE},status]</key>
+                            <delay>0</delay>
+                            <history>14</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>backup</name>
+                                </application>
+                            </applications>
+                            <valuemap>
+                                <name>zbxora rman status</name>
+                            </valuemap>
+                            <logtimefmt/>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>(({template zbxORA:rman[{#OBJ_TYPE},age].last()}&gt; &#13;
+( {$ZBXORA_BKUP_AGE_FACTOR}* {template zbxORA:rman[{#OBJ_TYPE},age].avg(30d)}&#13;
+) and {template zbxORA:rman[{#OBJ_TYPE},age].time(0)} &gt; 080000 and {template zbxORA:rman[{#OBJ_TYPE},age].time(0)} &lt; 180000 and {TRIGGER.VALUE}=0) or ({template zbxORA:rman[{#OBJ_TYPE},age].last()}&gt;( {$ZBXORA_BKUP_AGE_FACTOR}* {template zbxORA:rman[{#OBJ_TYPE},age].avg(30d)}&#13;
+) and {TRIGGER.VALUE}=1))&#13;
+and {$ZBXORA_BKUP_AGE_FACTOR} &gt; 0</expression>
+                            <name>rman bkup {#OBJ_TYPE} {$ZBXORA_BKUP_AGE_FACTOR} * older than usual avg</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>2</priority>
+                            <description>try to report when last backup far over average age. Age is taken from last 30 days. Raise only in daytime, clear only when solved.&#13;
+Set macro {$ZBXORA_BKUP_AGE_FACTOR} to 0 if backups are not important for the given host</description>
+                            <type>0</type>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>(({template zbxORA:rman[{#OBJ_TYPE},status].last()}&gt;0 and {template zbxORA:rman[{#OBJ_TYPE},status].last()}&lt;4 and {template zbxORA:rman[{#OBJ_TYPE},status].time(0)} &gt; 080000 and {template zbxORA:rman[{#OBJ_TYPE},status].time(0)} &lt; 180000 and {TRIGGER.VALUE}=0) or ({TRIGGER.VALUE}=1 and {template zbxORA:rman[{#OBJ_TYPE},status].last()}&gt;0 and {template zbxORA:rman[{#OBJ_TYPE},status].last()}&lt;4)) and {$ZBXORA_BKUP_AGE_FACTOR} &gt; 0</expression>
+                            <name>rman[{#OBJ_TYPE}].last bkup failed</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>1</priority>
+                            <description>set macro {$ZBXORA_BKUP_AGE_FACTOR} to 0 when backups are not of any importance.&#13;
+&#13;
+Trigger fires only during daytime, clears when last backup succeeded.</description>
+                            <type>0</type>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>rman {#OBJ_TYPE}</name>
+                            <width>900</width>
+                            <height>200</height>
+                            <yaxismin>0</yaxismin>
+                            <yaxismax>100</yaxismax>
+                            <show_work_period>1</show_work_period>
+                            <show_triggers>1</show_triggers>
+                            <type>0</type>
+                            <show_legend>1</show_legend>
+                            <show_3d>0</show_3d>
+                            <percent_left>0</percent_left>
+                            <percent_right>0</percent_right>
+                            <ymin_type_1>0</ymin_type_1>
+                            <ymax_type_1>0</ymax_type_1>
+                            <ymin_item_1>0</ymin_item_1>
+                            <ymax_item_1>0</ymax_item_1>
+                            <graph_items>
+                                <graph_item>
+                                    <sortorder>0</sortorder>
+                                    <drawtype>0</drawtype>
+                                    <color>00C800</color>
+                                    <yaxisside>0</yaxisside>
+                                    <calc_fnc>2</calc_fnc>
+                                    <type>0</type>
+                                    <item>
+                                        <host>template zbxORA</host>
+                                        <key>rman[{#OBJ_TYPE},age]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <drawtype>0</drawtype>
+                                    <color>C80000</color>
+                                    <yaxisside>0</yaxisside>
+                                    <calc_fnc>4</calc_fnc>
+                                    <type>0</type>
+                                    <item>
+                                        <host>template zbxORA</host>
+                                        <key>rman[{#OBJ_TYPE},age]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <drawtype>0</drawtype>
+                                    <color>0000C8</color>
+                                    <yaxisside>0</yaxisside>
+                                    <calc_fnc>2</calc_fnc>
+                                    <type>0</type>
+                                    <item>
+                                        <host>template zbxORA</host>
+                                        <key>rman[{#OBJ_TYPE},ela]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                    <host_prototypes/>
+                </discovery_rule>
+                <discovery_rule>
                     <name>services</name>
                     <type>2</type>
                     <snmp_community/>
@@ -1914,7 +2434,7 @@
                         <formula/>
                         <conditions/>
                     </filter>
-                    <lifetime>30</lifetime>
+                    <lifetime>7</lifetime>
                     <description/>
                     <item_prototypes>
                         <item_prototype>
@@ -2369,7 +2889,7 @@
                             <key>zbxora[query,{#SECTION},{#KEY},ela]</key>
                             <delay>0</delay>
                             <history>7</history>
-                            <trends>30</trends>
+                            <trends>365</trends>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
@@ -2590,6 +3110,10 @@
                 </discovery_rule>
             </discovery_rules>
             <macros>
+                <macro>
+                    <macro>{$ZBXORA_BKUP_AGE_FACTOR}</macro>
+                    <value>4</value>
+                </macro>
                 <macro>
                     <macro>{$ZBXORA_NODATA}</macro>
                     <value>30m</value>
