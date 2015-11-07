@@ -130,29 +130,29 @@ the database. This saves a lot of space compared to having to run - and store - 
 Since zabbix does not -yet- export value mappings, first create them with following properties:
 
   zbxora arl_dest
-  0 ⇒ OK
-  1 ⇒ DEFERRED
-  2 ⇒ ERROR
-  3 ⇒ UNK
+  - 0 ⇒ OK
+  - 1 ⇒ DEFERRED
+  - 2 ⇒ ERROR
+  - 3 ⇒ UNK
 
   zbxora rman status  
-  0 ⇒ COMPLETED
-  1 ⇒ FAILED
-  2 ⇒ COMPLETED WITH WARNINGS
-  3 ⇒ COMPLETED WITH ERRORS
-  4 ⇒ noinfo
-  5 ⇒ RUNNING
-  9 ⇒ unk
+  - 0 ⇒ COMPLETED
+  - 1 ⇒ FAILED
+  - 2 ⇒ COMPLETED WITH WARNINGS
+  - 3 ⇒ COMPLETED WITH ERRORS
+  - 4 ⇒ noinfo
+  - 5 ⇒ RUNNING
+  - 9 ⇒ unk
 
   zbxora[checks,status] 0 ⇒ OK
-  11 ⇒ unreadable
-  13 ⇒ parse error[s]
+  - 11 ⇒ unreadable
+  - 13 ⇒ parse error[s]
 
   zbxora[connect,status]  
-  0 ⇒ OK
+  - 0 ⇒ OK
 
   zbxora[query,,,status]  
-  0 ⇒ OK
+  - 0 ⇒ OK
 
 # Warning:
 Use the code at your own risk. It is tested and seems to be functional. Use an account with the
