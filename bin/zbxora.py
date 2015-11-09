@@ -38,7 +38,8 @@
 #          rrood 0.98 20150924 zbxora[uptime] reported in connect exception
 #          rrood 0.99 20151031 added sql timeout to handle ora-257 hang situations
 #          rrood 1.00 20151105 added auto restart if zbxora.py changed
-VERSION = "1.00"
+#          rrood 1.01 20151109 removed bug in which checks collection was not reset a reconnect
+VERSION = "1.01"
 import cx_Oracle as db
 import json
 import collections
@@ -124,6 +125,8 @@ while True:
                 datetime.datetime.fromtimestamp(time.time()), CHECKSFILE)
             os.execv(__file__, sys.argv)
 
+        # reset list in case of a just new connection that reloads the config
+        CHECKFILES = [ [__file__, os.stat( __file__ ).st_mtime] ]
         CONFIG = ConfigParser.RawConfigParser()
         INIF = open(OPTIONS.configfile, 'r')
         CONFIG.readfp(INIF)
