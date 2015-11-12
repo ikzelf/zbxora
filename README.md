@@ -162,7 +162,9 @@ Since zabbix does not -yet- export value mappings, first create them with follow
   zbxora[query,,,status]
   - 0 ⇒ OK
 
-For your convenience, just run valuemapping_oracle.sql, if your zabbix lives in an Oracle database.
+For your convenience, just run 
+valuemapping_oracle.sql, if your zabbix lives in an Oracle database or
+valuemapping_mysql.sql if your zabbix lives in a mysql database (untested).
 
 # Warning:
 Use the code at your own risk. It is tested and seems to be functional. Use an account with the
