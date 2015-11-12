@@ -17,8 +17,6 @@ insert into valuemaps (valuemapid,name) VALUES (&vid+4, 'zbxora[checks,status]')
 insert into valuemaps (valuemapid,name) VALUES (&vid+5, 'zbxora rman status');
 insert into valuemaps (valuemapid,name) VALUES (&vid+6, 'zbxora arl_dest');
 
-select * from valuemaps where name like 'zbxora%' order by valuemapid;
-
 INSERT INTO mappings (mappingid,valuemapid,VALUE,newvalue) values (&mid+1, &vid+1,1 ,'MOUNTED');
 INSERT INTO mappings (mappingid,valuemapid,VALUE,newvalue) values (&mid+2, &vid+1,2 ,'READ ONLY');
 INSERT INTO mappings (mappingid,valuemapid,VALUE,newvalue) values (&mid+3, &vid+1,3 ,'READ WRITE');
@@ -41,5 +39,6 @@ INSERT INTO mappings (mappingid,valuemapid,VALUE,newvalue) values (&mid+19,&vid+
 INSERT INTO mappings (mappingid,valuemapid,VALUE,newvalue) values (&mid+20,&vid+6,2 ,'ERROR');
 INSERT INTO mappings (mappingid,valuemapid,VALUE,newvalue) values (&mid+21,&vid+6,3 ,'UNK');
 
+select * from valuemaps where name like 'zbxora%' order by valuemapid;
 select * from mappings where valuemapid in (select valuemapid from valuemaps where name like 'zbxora%')
 order by valuemapid, mappingid;
