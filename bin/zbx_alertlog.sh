@@ -5,12 +5,19 @@ ORAENV_ASK=NO
 ps -ef|grep _pmon|grep -v grep|grep -v sed|awk '{print $8}'|sed "s/.*_pmon_//"|
 while read ORACLE_SID
 do
+  ROLE=sysdba
+  ASM=`echo $ORACLE_SID|cut -c1`
+  case $ASM in
+  "+") ROLE=sysasm;;
+  "-") ROLE=sysdg;;
+  *)   ROLE=sysdba;;
+  esac
   LINE=`grep "^$ORACLE_SID:" $ORATAB`
   if [ $? -eq 0 ]
   then
     	ORACLE_HOME=`echo $LINE|cut -f2 -d":"`
 .       oraenv >/dev/null 2>&1
-  	sqlplus -s / as sysdba<<eof
+  	sqlplus -s / as $ROLE<<eof
 set pages 0 lines 300 head off feed off
 col dll form a200
 select '{"{#INSTANCE_NAME}":"'||i.instance_name||'","{#ALERTLOG}":"'|| d.value||'/alert_'||i.instance_name||'.log"}' dll 
