@@ -39,8 +39,6 @@
 #          rrood 0.99 20151031 added sql timeout to handle ora-257 hang situations
 #          rrood 1.00 20151105 added auto restart if zbxora.py changed
 #          rrood 1.01 20151109 removed bug in which checks collection was not reset a reconnect
-#          rrood 1.02 20151120 fallback to sysdba ORA-12528, TNS:listener: instances blocking connections
-#                              needed for regular standby database that is recovering SYSOPER has not enough privs :-(
 VERSION = "1.01"
 import cx_Oracle as db
 import json
@@ -117,7 +115,6 @@ printf("%s out_file:%s\n", \
 SLEEPC = 0
 SLEEPER = 1
 PERROR = 0
-FALLBACK_SYSDBA = 0
 while True:
     try:
         z=CHECKFILES[0]
@@ -149,19 +146,16 @@ while True:
         else:
             OUTF = open(OUT_FILE, "w")
 
-        OMODE = 0 # NORMAL
+        OMODE = 0
         if ROLE.upper() == "SYSASM":
             OMODE = db.SYSASM
         if ROLE.upper() == "SYSDBA":
-            OMODE = db.SYSDBA
-        if FALLBACK_SYSDBA == 1:
             OMODE = db.SYSDBA
 
         x = USERNAME + "/" + PASSWORD + "@" + DB_URL
         START = timer()
         with db.connect(USERNAME + "/" + PASSWORD + "@" + DB_URL, mode=OMODE) as conn:
             CONNECTCOUNTER += 1
-            FALLBACK_SYSDBA = 0 # next connect, try default again
             output(HOSTNAME, ME[0]+"[connect,status]", 0)
             CURS = conn.cursor()
             try:
@@ -192,13 +186,13 @@ while True:
                 DBROL = "asm"
             CURS.close()
 
-            printf('%s connected db_url %s type %s db_role %s version %s\n%s user %s %s sid,serial %d,%d instance %s as %s %d\n',
+            printf('%s connected db_url %s type %s db_role %s version %s\n%s user %s %s sid,serial %d,%d instance %s as %s\n',
                     datetime.datetime.fromtimestamp(time.time()), \
                     DB_URL, ITYPE, DBROL, DBVERSION, \
                     datetime.datetime.fromtimestamp(time.time()), \
                     USERNAME, UNAME, MYSID, MYSERIAL, \
                     INAME, \
-                    ROLE, FALLBACK_SYSDBA)
+                    ROLE)
             if ITYPE == "asm":
                 CHECKSFILE = os.path.join(CHECKSFILE_PREFIX, DB_TYPE  , DBROL + "." + DBVERSION+".cfg")
             elif  DBROL == "PHYSICAL STANDBY":
@@ -495,16 +489,6 @@ while True:
             printf('%s: asm requires sysdba role instead of %s\n', \
             datetime.datetime.fromtimestamp(time.time()), ROLE )
             raise
-#          rrood 1.02 20151120 fallback to sysdba ORA-12528, TNS:listener: instances blocking connections
-        if ERROR.code == 12528 and FALLBACK_SYSDBA == 0:
-            printf('%s: try a fallback to SYSDBA since instance blocks regular connections\n', \
-            datetime.datetime.fromtimestamp(time.time()) )
-            FALLBACK_SYSDBA = 1
-        elif ERROR.code == 1017 and FALLBACK_SYSDBA == 1:
-            printf("%s: tried a fallback to SYSDBA but failed; won't try again until connected\n", \
-            datetime.datetime.fromtimestamp(time.time()) )
-            FALLBACK_SYSDBA = -1
-            
         if PERROR != ERROR.code:
             SLEEPC = 0
             SLEEPER = 1
