@@ -240,6 +240,8 @@ while True:
                     z=CHECKFILES[i]
                     CHECKSFILE = z[0]
                     CHECKSCHANGED = z[1]
+                    # if CHECKSFILE became inaccessible in run -> crash and no output :-(
+                    # change the CHECKSCHANGED to catch that.
                     if CHECKSCHANGED != os.stat(CHECKSFILE).st_mtime:
                         if i == 0:
                             printf("%s %s changed, restarting ...\n",

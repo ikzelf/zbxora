@@ -5,6 +5,15 @@ NOWD=$(date +%a)
 
 ZBXORA_OUT=$1
 
+if [ ! -d $HOME/$ME/in ]
+then
+  mkdir -p $HOME/$ME/in
+fi
+if [ ! -d $HOME/$ME/archive ]
+then
+  mkdir -p $HOME/$ME/archive
+fi
+
 mv $ZBXORA_OUT/* $HOME/$ME/in
 cd $HOME/$ME/in
 {
