@@ -127,7 +127,9 @@ database. This is fine for items like version, that are not often changed while 
 the database. This saves a lot of space compared to having to run - and store - this info every hour.
 
 # value mappings
-Since zabbix does not -yet- export value mappings, first create them with following properties:
+zabbix supports import of value mappings since v3. Now you can import value maps in
+"Administration->General->Value_Mapping"
+Since zabbix pre v3 did not export value mappings, first create them with following properties:
 
   zbxora arl_dest
   - 0 ⇒ OK
