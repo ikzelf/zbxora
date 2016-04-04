@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>3.0</version>
+    <date>2016-04-01T18:27:55Z</date>
+    <value_maps>
+        <value_map>
+            <name>zbxora arl_dest</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>OK</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>DEFERRED</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>ERROR</newvalue>
+                </mapping>
+                <mapping>
+                    <value>3</value>
+                    <newvalue>UNK</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+        <value_map>
+            <name>zbxora db.openstatus</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>*unknown*</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>MOUNTED</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>READ ONLY</newvalue>
+                </mapping>
+                <mapping>
+                    <value>3</value>
+                    <newvalue>READ WRITE</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>READ ONLY WITH APPLY</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+        <value_map>
+            <name>zbxora rman status</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>COMPLETED</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>FAILED</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>COMPLETED WITH WARNINGS</newvalue>
+                </mapping>
+                <mapping>
+                    <value>3</value>
+                    <newvalue>COMPLETED WITH ERRORS</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>noinfo</newvalue>
+                </mapping>
+                <mapping>
+                    <value>5</value>
+                    <newvalue>RUNNING</newvalue>
+                </mapping>
+                <mapping>
+                    <value>9</value>
+                    <newvalue>unk</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+        <value_map>
+            <name>zbxora[checks,status]</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>OK</newvalue>
+                </mapping>
+                <mapping>
+                    <value>11</value>
+                    <newvalue>unreadable</newvalue>
+                </mapping>
+                <mapping>
+                    <value>13</value>
+                    <newvalue>parse error[s]</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+        <value_map>
+            <name>zbxora[connect,status]</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>OK</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+        <value_map>
+            <name>zbxora[query,,,status]</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>OK</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>
