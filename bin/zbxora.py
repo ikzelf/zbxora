@@ -39,7 +39,8 @@
 #          rrood 0.99 20151031 added sql timeout to handle ora-257 hang situations
 #          rrood 1.00 20151105 added auto restart if zbxora.py changed
 #          rrood 1.01 20151109 removed bug in which checks collection was not reset a reconnect
-VERSION = "1.01"
+#          rrood 1.02 20151109 added ora 1041 as reason for re-connect
+VERSION = "1.02"
 import cx_Oracle as db
 import json
 import collections
@@ -416,7 +417,7 @@ while True:
                                       printf('%s key=%s.%s ORA-%d: Database execution error: %s\n', \
                                           datetime.datetime.fromtimestamp(time.time()), \
                                           section, key, ERROR.code, ERROR.message.strip())
-                                      if ERROR.code in(28, 1012, 1013, 3113, 3114, 3135):
+                                      if ERROR.code in(28, 1012, 1013, 1041, 3113, 3114, 3135):
                                           raise
                           # end of a section
                           output(HOSTNAME, ME[0] + "[query," + section + ",,ela]", \
@@ -478,8 +479,8 @@ while True:
     except db.DatabaseError as oerr:
         ERROR, = oerr.args
         ELAPSED = timer() - START
-        if ERROR.code not in (1012, 1013, 3114):
-            # from a killed session or similar
+        if ERROR.code not in (1012, 1013, 1041, 3114):
+            # from a killed session, crashed instance or similar
             CONNECTERROR += 1
             output(HOSTNAME, ME[0] + "[connect,status]", ERROR.code)
         output(HOSTNAME, ME[0] + "[uptime]", int(timer() - STARTTIME))
