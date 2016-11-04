@@ -2,8 +2,27 @@
 ME=${0##*/}
 NOW=$(date +%Y%m%d-%H%M)
 NOWD=$(date +%a)
+if [ $# -ne 1 ]
+then
+  echo "Usage $ME ZBXORA_OUT"
+  echo "   to collect outputs from that directory to send to zabbix"
+  echo "   using \$HOME/$ME directory for work space"
+  echo "   using \$HOME/log for log directory"
+  echo "   PLEASE do not run zbxora processes as root"
+  exit 1
+fi >&2
 
 ZBXORA_OUT=$1
+if [ ! -d $ZBXORA_OUT ]
+then
+  echo "$ME ZBXORA_OUT directory $ZBXORA_OUT does not exist"
+  exit 1
+fi >&2
+if [ ! -w $ZBXORA_OUT ]
+then
+  echo "$ME ZBXORA_OUT directory $ZBXORA_OUT not writeable"
+  exit 1
+fi >&2
 
 if [ ! -d $HOME/$ME/in ]
 then
