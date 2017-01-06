@@ -40,7 +40,9 @@
 #          rrood 1.00 20151105 added auto restart if zbxora.py changed
 #          rrood 1.01 20151109 removed bug in which checks collection was not reset a reconnect
 #          rrood 1.02 20151109 added ora 1041 as reason for re-connect
-VERSION = "1.02"
+#          rrood 1.03 20151109 added ASMPROXY support
+#          rrood 1.04 20151109 removes sql timeout (ora 01013) as reason for disconnect
+VERSION = "1.04"
 import cx_Oracle as db
 import json
 import collections
@@ -194,8 +196,9 @@ while True:
                     USERNAME, UNAME, MYSID, MYSERIAL, \
                     INAME, \
                     ROLE)
-            if ITYPE == "asm":
-                CHECKSFILE = os.path.join(CHECKSFILE_PREFIX, DB_TYPE  , DBROL + "." + DBVERSION+".cfg")
+            if DBROL == "asm":
+                CHECKSFILE = os.path.join(CHECKSFILE_PREFIX, DB_TYPE  , ITYPE.lower() + "." + DBVERSION+".cfg")
+                # could be asm or ASMPROXY
             elif  DBROL == "PHYSICAL STANDBY":
                 CHECKSFILE = os.path.join(CHECKSFILE_PREFIX, DB_TYPE  , "standby" + "." + DBVERSION+".cfg")
             else:
@@ -417,7 +420,9 @@ while True:
                                       printf('%s key=%s.%s ORA-%d: Database execution error: %s\n', \
                                           datetime.datetime.fromtimestamp(time.time()), \
                                           section, key, ERROR.code, ERROR.message.strip())
-                                      if ERROR.code in(28, 1012, 1013, 1041, 3113, 3114, 3135):
+                                      # if ERROR.code in(28, 1012, 1013, 1041, 3113, 3114, 3135):
+                                      # removed sql timeout as reason to start a new session
+                                      if ERROR.code in(28, 1012, 1041, 3113, 3114, 3135):
                                           raise
                           # end of a section
                           output(HOSTNAME, ME[0] + "[query," + section + ",,ela]", \
