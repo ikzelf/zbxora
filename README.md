@@ -62,7 +62,7 @@ Using the site_checks as shown, zbxora tries to find them in {checks_prefix}_sap
 and in {checks_prefix}_ebs.cfg (just specify a comma separated list for this)
 Outputfile containing the metrics is created in out_dir/zbxora.fsdb02.zbx
 
-After having connected to the sepcified service, zbxora finds out the instance_type and version,
+After having connected to the specified service, zbxora finds out the instance_type and version,
 after which the database_role is determined, if applicable.
 Using these parameters the correct zbxora_checks_X.Y.cfg file is chosen.
 
