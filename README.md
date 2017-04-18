@@ -51,6 +51,7 @@ to_zabbix_method: NOzabbix_sender
 to_zabbix_args: zabbix_sender -z 127.0.0.1 -T -i 
 # the output filename is added to to_zabbix_args
 ```
+(check out http://ronr.blogspot.nl/2017/01/cleartext-userid-and-passwords-in.html regarding passwords)
 
 Assuming bin/ is in PATH:
 When using this configfile ( zbxora.py -c etc/zbxora.fsdb02.cfg )
