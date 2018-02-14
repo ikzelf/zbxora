@@ -14,7 +14,7 @@ Optionally calling zabbix_sender to upload data
 Supports Oracle 9,10,11,12 RAC,asm and plugin databases
 Tested with Oracle 11,12 RAC,standby,asm and plugin databases
 For newer db versions support .... start with copying the latest
-versions checks files and see which quiries need adjustments.
+versions checks files and see which queries need adjustments.
 
 usage zbxora.py -c configfile
 resulting in log to stdout and datafile in specified out_dir/{configfile}.zbx
