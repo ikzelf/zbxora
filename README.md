@@ -2,7 +2,7 @@
 Zabbix Oracle monitoring plugin
 Downloadable from https://github.com/ikzelf/zbxora
 
-Written in python
+Written in python.
 since v1.97 prepared for python-3
             no longer working in python 2.6
             tested with 2.7.9 and 3.6.4
