@@ -2,13 +2,18 @@
 Zabbix Oracle monitoring plugin
 Downloadable from https://github.com/ikzelf/zbxora
 
-Written in python, tested with python 2.6 and 2.7.
+Written in python
+since v1.97 prepared for python-3
+            no longer working in python 2.6
+            tested with 2.7.9 and 3.6.4
 Using cx_Oracle
 purpose is monitoring an Oracle database in an efficient way.
 Optionally calling zabbix_sender to upload data
 
 Supports Oracle 9,10,11,12 RAC,asm and plugin databases
 Tested with Oracle 11,12 RAC,standby,asm and plugin databases
+For newer db versions support .... start with copying the latest
+versions checks files and see which quiries need adjustments.
 
 usage zbxora.py -c configfile
 resulting in log to stdout and datafile in specified out_dir/{configfile}.zbx
