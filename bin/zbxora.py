@@ -28,7 +28,7 @@ from timeit import default_timer as timer
 import platform
 # from pdb import set_trace
 import cx_Oracle as db
-VERSION = "1.97"
+VERSION = "1.98"
 
 def printf(format, *args):
     """just a simple c-style printf function"""
@@ -301,7 +301,6 @@ while True:
                             E = {"{#SECTION}": section}
                             SECTIONS_LIST.append(E)
                             x = dict(CHECKS.items(section))
-                            # set_trace()
                             for key, sql  in sorted(x.items()):
                                 if sql and key != "minutes":
                                     d = collections.OrderedDict()
@@ -321,8 +320,8 @@ while True:
                 #
                 # assume we are still connected. If not, exception will tell real story
                 output(HOSTNAME, ME[0] + "[connect,status]", 0)
-                output(HOSTNAME, ME[0] + "[uptime]", int(timer() - STARTTIME))
-                output(HOSTNAME, ME[0] + "[opentime]", int(timer() - OPENTIME))
+                output(HOSTNAME, ME[0] + "[uptime]", int(time.time() - STARTTIME))
+                output(HOSTNAME, ME[0] + "[opentime]", int(time.time() - OPENTIME))
 
                 # the connect status is only real if executed a query ....
                 for CHECKS in ALL_CHECKS:
