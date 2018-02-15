@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>3.0</version>
+    <date>2018-02-15T08:52:30Z</date>
+    <groups>
+        <group>
+            <name>TEMPLATES</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>template zbx_alertlog</template>
+            <name>template zbx_alertlog</name>
+            <description>for alertlog discovery on every database server with a zabbix agent</description>
+            <groups>
+                <group>
+                    <name>TEMPLATES</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>oracle</name>
+                </application>
+            </applications>
+            <items/>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>oracle.alertlog.lld</name>
+                    <type>7</type>
+                    <snmp_community/>
+                    <snmp_oid/>
+                    <key>oracle.alertlog.lld</key>
+                    <delay>600</delay>
+                    <status>0</status>
+                    <allowed_hosts/>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <filter>
+                        <evaltype>0</evaltype>
+                        <formula/>
+                        <conditions/>
+                    </filter>
+                    <lifetime>14</lifetime>
+                    <description/>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>{#INSTANCE_NAME}[alertlog]</name>
+                            <type>7</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>log[{#ALERTLOG},(ORA-|time=|ERROR)]</key>
+                            <delay>60</delay>
+                            <history>8</history>
+                            <trends>0</trends>
+                            <status>0</status>
+                            <value_type>2</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>oracle</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt>&lt;msg time='yyyy-MM-ddThh:mm:ss</logtimefmt>
+                            <application_prototypes/>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{template zbx_alertlog:log[{#ALERTLOG},(ORA-|time=|ERROR)].iregexp(&quot;^ORA-0*403(0|1|2|3|5|6):&quot;,2h)}=1</expression>
+                            <name>{#INSTANCE_NAME}[alertlog] allocate pga/shared</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>3</priority>
+                            <description>memory problems shared pool or pga</description>
+                            <type>0</type>
+                            <dependencies/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbx_alertlog:log[{#ALERTLOG},(ORA-|time=|ERROR)].iregexp(&quot;^ORA-0*1578:&quot;,1h)}=1</expression>
+                            <name>{#INSTANCE_NAME}[alertlog] corrupted block[s]</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description>block corruption</description>
+                            <type>0</type>
+                            <dependencies/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbx_alertlog:log[{#ALERTLOG},(ORA-|time=|ERROR)].iregexp(&quot;.*DEADLOCK.*&quot;,5m)}=1</expression>
+                            <name>{#INSTANCE_NAME}[alertlog] deadlock</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>1</priority>
+                            <description>kan zijn: ORA-00060 maar ook: Global Enqueue Services Deadlock detected dus op text blijven scannen</description>
+                            <type>0</type>
+                            <dependencies/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbx_alertlog:log[{#ALERTLOG},(ORA-|time=|ERROR)].iregexp(&quot;^ORA-12012:&quot;,1h)}=1</expression>
+                            <name>{#INSTANCE_NAME}[alertlog] error on auto executed job</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>1</priority>
+                            <description/>
+                            <type>0</type>
+                            <dependencies/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbx_alertlog:log[{#ALERTLOG},(ORA-|time=|ERROR)].iregexp(&quot;^ORA-0*(600|7445):&quot;,2h)}=1</expression>
+                            <name>{#INSTANCE_NAME}[alertlog] has internal error[s]</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>1</priority>
+                            <description>internal errors like 00600 07445</description>
+                            <type>0</type>
+                            <dependencies/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbx_alertlog:log[{#ALERTLOG},(ORA-|time=|ERROR)].iregexp(&quot;.*ORA-0*(1652|1653|1683|1691|1692|30036):&quot;,2h)}=1</expression>
+                            <name>{#INSTANCE_NAME}[alertlog] has unable to extend ...</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description/>
+                            <type>0</type>
+                            <dependencies/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbx_alertlog:log[{#ALERTLOG},(ORA-|time=|ERROR)].iregexp(&quot;^ORA-0*(19809|18|20|1000):&quot;,2h)}=1</expression>
+                            <name>{#INSTANCE_NAME}[alertlog] limit exceeded</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description>ORA-00018.Maximum number of sessions exceed&#13;
+ORA-00020: maximum number of processes exceeded&#13;
+ORA-01000: maximum open cursors exceeded&#13;
+ORA-19809 limit exceeded for recovery files</description>
+                            <type>0</type>
+                            <dependencies/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{template zbx_alertlog:log[{#ALERTLOG},(ORA-|time=|ERROR)].iregexp(&quot;^ERROR: Unable to get logical block size for spfile&quot;,10m)}=1</expression>
+                            <name>{#INSTANCE_NAME}[alertlog] spfile problem</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>1</priority>
+                            <description>ERROR: Unable to get logical block size for spfile&#13;
+mogelijk spfile opnieuw aanmaken en alias maken naar actieve locatie</description>
+                            <type>0</type>
+                            <dependencies/>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes/>
+                    <host_prototypes/>
+                </discovery_rule>
+            </discovery_rules>
+            <macros/>
+            <templates/>
+            <screens/>
+        </template>
+    </templates>
+</zabbix_export>

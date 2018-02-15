@@ -32,7 +32,7 @@ list_listener()
       fi
 }
 
-cat $HOME/etc/$ME.cfg|while read group cluster nodes
+cat $HOME/etc/$ME.cfg|grep -v " *#"|while read group cluster nodes
 do
   echo nodes $nodes >&2
   list_listener "$group" "$cluster" "$nodes"
