@@ -17,8 +17,8 @@ select '{"{#INSTANCE_NAME}":"'||i.instance_name||'","{#ALERTLOG}":"'|| d.value||
 from v\$instance i, v\$diag_info d
            where d.name = 'Diag Alert';
 eof
-  else
-    	echo $ORACLE_SID unknown
+  # else
+    	# echo $ORACLE_SID unknown
   fi
 done | awk 'BEGIN { printf ("{ \"data\":[\n"); comma=" "  }
             { printf ("%s%s\n", comma, $0); comma="," }

@@ -476,7 +476,7 @@ while True:
             # from a killed session, crashed instance or similar
             CONNECTERROR += 1
             output(HOSTNAME, ME[0] + "[connect,status]", ERROR.code)
-        output(HOSTNAME, ME[0] + "[uptime]", int(timer() - STARTTIME))
+        output(HOSTNAME, ME[0] + "[uptime]", int(time.time()) - STARTTIME))
         if ERROR.code == 15000:
             printf('%s: connection error: %s for %s@%s %s\n', \
                 datetime.datetime.fromtimestamp(time.time()), \
