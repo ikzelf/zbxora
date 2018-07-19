@@ -2,6 +2,17 @@
 Zabbix Oracle monitoring plugin
 Downloadable from https://github.com/ikzelf/zbxora
 
+Currently the multi vendor replacement for zbxora (Oraclel only) is stable enough for production usage. The multi vendor replacement of zbxora is zbxdb, download it from https://github.com/ikzelf/zbxdb The configuration and usage of zbxdb is the same as for zbxora, it just support multiple vendors and is very easy to extend to other databases and drivers. The basis of zbxdb was zbxora-1.98. My advice: switch to zbxdb. It also has the passwords encrypted in the configuration file. I will no longer maintain zbxora since zbxdb is the smarter way to go.
+Migration to zbxdb is simple:
+1) change the zbxora template to no longer fill the zbxora version number in the zabbix inventory
+2) unlink the zbxora template from your host[s] (don't clear)
+3) link the zbxdb template
+4) stop the zbxora process[es]
+5) start the zbxdb processes
+
+In the configuration file[s] add instance_type: rdbms, db_type: oracle, db_driver: cx_Oracle
+During startup zbxdb converts the password to password_enc
+
 Written in python.
 
 since v1.97 prepared for python-3
