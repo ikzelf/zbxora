@@ -1,4 +1,4 @@
-# zbxora
+# zbxora -  archived, use zbxdb instead
 Zabbix Oracle monitoring plugin
 Downloadable from https://github.com/ikzelf/zbxora
 
